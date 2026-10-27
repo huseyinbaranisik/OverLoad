@@ -45,8 +45,10 @@ const sysArg = arg('system', 'v1'), tag = arg('tag', sysArg.replace(/\W+/g, '_')
 const system = G.TUTOR_SYSTEMS[sysArg] ?? fs.readFileSync(path.resolve(sysArg), 'utf8');
 const models = arg('model') ? [arg('model')] : [...G.TUTOR_MODELS];
 
-// Yoğunluk (503/429) ve ağ hatalarında artan aralıklarla yeniden dene; diğer hatalar hemen kaydedilir
-const RETRYABLE = /high demand|overloaded|unavailable|503|429|resource.?exhausted|rate|fetch failed|timeout/i;
+// Yoğunluk (503) ve ağ hatalarında artan aralıklarla yeniden dene. Günlük kota dolduysa beklemek işe yaramaz:
+// betik durur, alınan cevaplar dosyada kalır; kota yenilenince --resume ile kalanlar tamamlanır.
+const RETRYABLE = /high demand|overloaded|unavailable|503|fetch failed|timeout/i;
+const QUOTA = /quota|resource.?exhausted|429/i;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 async function ask(cs) {
   for (let attempt = 0, wait = 5000; ; attempt++, wait = Math.min(wait * 2, 60000)) {
@@ -59,11 +61,42 @@ async function ask(cs) {
   }
 }
 
-const results = [], file = `results_${tag}.csv`;
+// --resume: önceki dosyadaki başarılı cevapları koru, yalnızca eksik ya da hatalı vakaları çalıştır
+function parseCsv(text) {
+  const rows = []; let row = [], cell = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"' && text[i + 1] === '"') { cell += '"'; i++; } else if (ch === '"') q = false; else cell += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(cell); cell = ''; }
+    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && text[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+    else cell += ch;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+const results = [], file = `results_${tag}.csv`, filePath = path.join(here, file);
+const done = new Map();
+if (process.argv.includes('--resume') && fs.existsSync(filePath)) {
+  const [head, ...rows] = parseCsv(fs.readFileSync(filePath, 'utf8').replace(/^﻿/, ''));
+  const iId = head.indexOf('id'), iReply = head.indexOf('tutor_cevabi'), iSrc = head.indexOf('kaynak');
+  for (const r of rows) if (r[iReply] && !r[iReply].startsWith('HATA')) done.set(r[iId], { reply: r[iReply], source: r[iSrc] });
+  console.log(`--resume: ${done.size} vaka önceki çalıştırmadan alındı`);
+}
+
 for (const cs of G.EVAL_CASES) {
+  if (done.has(cs.id)) { results.push({ case: cs, ...done.get(cs.id) }); continue; }
   let reply, source = `gemini (${models.join(' / ')})`;
   try { reply = await ask(cs); }
-  catch (err) { reply = `HATA: ${err.message}`; source = 'hata'; }
+  catch (err) {
+    if (QUOTA.test(err.message)) {
+      fs.writeFileSync(filePath, G.evalCsv(results));
+      console.log(`\n${cs.id}: günlük kota doldu. ${results.length} vaka kaydedildi; kota yenilenince aynı komuta --resume ekleyerek devam et.`);
+      console.log(err.message.match(/retry in [^.]+/i)?.[0] || '');
+      process.exit(2);
+    }
+    reply = `HATA: ${err.message}`; source = 'hata';
+  }
   results.push({ case: cs, reply, source });
   fs.writeFileSync(path.join(here, file), G.evalCsv(results)); // yarıda kalırsa elde edilenler kaybolmasın
   console.log(`${cs.id}  ${reply.slice(0, 90).replace(/\n/g, ' ')}${reply.length > 90 ? '…' : ''}`);

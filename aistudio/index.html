@@ -17,7 +17,7 @@
   --panel: #1a3247; --panel2: #22405a; --panel3: #2b5070;
   --paper: #f5ecd7;          /* ana metin: krem kağıt */
   --muted: #9db4c6;
-  --sun: #ffd23f; --orange: #ff8a3d; --red: #ff5263; --green: #5fe39a; --teal: #3fe0c5; --sky: #63c7ff; --violet: #b996ff;
+  --sun: #ffd23f; --orange: #ff8a3d; --red: #ff5263; --red-text: #ff8a95; /* küçük kırmızı yazı: koyu panelde 4,5:1 üstü */ --green: #5fe39a; --teal: #3fe0c5; --sky: #63c7ff; --violet: #b996ff;
   --stroke: 3px;
   --pop: 4px 4px 0 var(--ink);
   --pop-sm: 3px 3px 0 var(--ink);
@@ -102,7 +102,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--sun); outli
 .toggle input:focus-visible + i { outline: 3px solid var(--sun); outline-offset: 2px; }
 
 .howto { padding-left: 20px; line-height: 1.5; } .howto li { margin-bottom: 8px; }
-.t-red { color: var(--red); font-weight: 700; } .t-orange { color: var(--orange); font-weight: 700; }
+.t-red { color: var(--red-text); font-weight: 700; } .t-orange { color: var(--orange); font-weight: 700; }
 </style>
 <style>/* css/crt.css */
 /* Sürekli CRT dokusu: tarama çizgileri + köşe kararması + hafif titreme */
@@ -161,7 +161,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--sun); outli
 
 .logo { text-align: center; margin-top: 18px; }
 .logo-tag {
-  display: inline-block; padding: 4px 10px; border-radius: 8px; background: var(--red); color: #fff;
+  display: inline-block; padding: 4px 10px; border-radius: 8px; background: var(--red); color: var(--ink);
   border: 2px solid var(--ink); box-shadow: var(--pop-sm); font-weight: 800; font-size: 11px; letter-spacing: .12em; transform: rotate(-2deg);
 }
 .logo-title { margin: 12px 0 4px; font-family: var(--display); font-weight: 400; line-height: .9; letter-spacing: .02em; }
@@ -213,7 +213,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--sun); outli
 .ev-q { margin: 8px 0 6px; font-style: italic; }
 .ev-a { margin: 0; padding: 8px 10px; border-radius: 10px; background: var(--paper); color: var(--ink); }
 .ev-a.pending { background: var(--panel2); color: var(--muted); }
-.ev-flag { color: var(--red); font-weight: 700; }
+.ev-flag { color: var(--red-text); font-weight: 700; }
 </style>
 <style>/* css/game.css */
 /* ---------- HUD ---------- */
@@ -229,7 +229,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--sun); outli
 }
 #heatFill.warm { background-color: var(--orange); }
 #heatFill.hot { background-color: var(--red); }
-.hud.danger .lbl, .hud.danger #heatTxt { color: var(--red); animation: blink .8s infinite; }
+.hud.danger .lbl, .hud.danger #heatTxt { color: var(--red-text); animation: blink .8s infinite; }
 .hud.danger .bar { box-shadow: 0 0 0 2px var(--red), 0 0 14px #ff526399; }
 @keyframes blink { 50% { opacity: .35; } }
 #heatTxt { font-family: var(--display); font-size: 18px; min-width: 52px; text-align: right; }
@@ -280,7 +280,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--sun); outli
 
 /* ---------- olay şeridi + ajan kartları ---------- */
 #incidentBar { padding: 9px 12px; min-height: 46px; font-size: 13px; line-height: 1.45; background: var(--bg2); border-top: var(--stroke) solid var(--ink); }
-#incidentBar b { color: var(--red); }
+#incidentBar b { color: var(--red-text); }
 .chip { display: inline-block; padding: 1px 7px; margin: 2px 4px 0 0; border-radius: 6px; background: var(--panel2); border: 2px solid var(--ink); font-size: 12px; font-weight: 700; }
 .hint { color: var(--sun); }
 #agents { display: flex; gap: 6px; overflow-x: auto; padding: 10px 10px calc(12px + env(safe-area-inset-bottom)); background: var(--panel); border-top: var(--stroke) solid var(--ink); }
@@ -310,12 +310,12 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--sun); outli
   border: var(--stroke) solid var(--ink); box-shadow: var(--pop); position: relative; margin: 12px 0 18px !important;
 }
 .quote::after { content: ''; position: absolute; left: 22px; bottom: -14px; border: 7px solid transparent; border-top-color: var(--ink); }
-.ring { display: inline-block; font-family: var(--display); font-size: 13px; color: var(--ink); background: var(--teal); padding: 3px 10px; border-radius: 8px; border: 2px solid var(--ink); animation: shake .45s infinite; }
-@keyframes shake { 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } }
+.ring { display: inline-block; font-family: var(--display); font-size: 13px; color: var(--ink); background: var(--teal); padding: 3px 10px; border-radius: 8px; border: 2px solid var(--ink); animation: ringShake .45s infinite; }
+@keyframes ringShake { 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } }
 .tag { display: inline-block; padding: 3px 10px; border-radius: 8px; font-size: 12px; font-weight: 800; border: 2px solid var(--ink); box-shadow: 2px 2px 0 var(--ink); }
 .tag.orange { background: var(--orange); color: var(--ink); }
 .tag.good { background: var(--green); color: var(--ink); }
-.tag.bad { background: var(--red); color: #fff; }
+.tag.bad { background: var(--red); color: var(--ink); }
 .opt {
   display: block; width: 100%; text-align: left; margin-top: 10px; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600;
   background: var(--panel2); border: var(--stroke) solid var(--ink); box-shadow: var(--pop-sm);
@@ -360,7 +360,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--sun); outli
 .end-title.good { color: var(--green); }
 .end-title.bad { color: var(--red); }
 .goal-line { padding: 10px 12px; border-radius: 12px; background: var(--panel); border: 2px solid var(--ink); }
-.goal-line .ok { color: var(--green); font-weight: 900; } .goal-line .no { color: var(--red); font-weight: 900; }
+.goal-line .ok { color: var(--green); font-weight: 900; } .goal-line .no { color: var(--red-text); font-weight: 900; }
 #end h3 { font-size: 12px; letter-spacing: .1em; color: var(--muted); margin: 20px 0 8px; }
 .log { list-style: none; padding: 0; margin: 0 0 8px; }
 .log li { padding: 11px 12px; margin-bottom: 9px; border-radius: 12px; background: var(--panel); border: 2px solid var(--ink); border-left: 8px solid var(--green); box-shadow: var(--pop-sm); font-size: 14px; line-height: 1.45; }
@@ -384,9 +384,9 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--sun); outli
 
 /* ---------- olay şeridi ---------- */
 .sev { display: inline-block; padding: 0 6px; border-radius: 5px; border: 2px solid var(--ink); font-size: 10.5px; font-weight: 900; letter-spacing: .05em; color: var(--ink); vertical-align: 1px; }
-.sev.dusuk { background: var(--sky); } .sev.orta { background: var(--orange); } .sev.kritik { background: var(--red); color: #fff; }
+.sev.dusuk { background: var(--sky); } .sev.orta { background: var(--orange); } .sev.kritik { background: var(--red); color: var(--ink); }
 #incidentBar .left { float: right; font-weight: 800; font-variant-numeric: tabular-nums; }
-#incidentBar .left.hot { color: var(--red); animation: blink .6s infinite; }
+#incidentBar .left.hot { color: var(--red-text); animation: blink .6s infinite; }
 .stats-line { color: var(--muted); }
 .stats-line b { color: var(--paper); }
 

@@ -12,7 +12,7 @@
 
 .logo { text-align: center; margin-top: 18px; }
 .logo-tag {
-  display: inline-block; padding: 4px 10px; border-radius: 8px; background: var(--red); color: #fff;
+  display: inline-block; padding: 4px 10px; border-radius: 8px; background: var(--red); color: var(--ink);
   border: 2px solid var(--ink); box-shadow: var(--pop-sm); font-weight: 800; font-size: 11px; letter-spacing: .12em; transform: rotate(-2deg);
 }
 .logo-title { margin: 12px 0 4px; font-family: var(--display); font-weight: 400; line-height: .9; letter-spacing: .02em; }
@@ -64,4 +64,4 @@
 .ev-q { margin: 8px 0 6px; font-style: italic; }
 .ev-a { margin: 0; padding: 8px 10px; border-radius: 10px; background: var(--paper); color: var(--ink); }
 .ev-a.pending { background: var(--panel2); color: var(--muted); }
-.ev-flag { color: var(--red); font-weight: 700; }
+.ev-flag { color: var(--red-text); font-weight: 700; }

@@ -5,7 +5,7 @@
   --panel: #1a3247; --panel2: #22405a; --panel3: #2b5070;
   --paper: #f5ecd7;          /* ana metin: krem kağıt */
   --muted: #9db4c6;
-  --sun: #ffd23f; --orange: #ff8a3d; --red: #ff5263; --green: #5fe39a; --teal: #3fe0c5; --sky: #63c7ff; --violet: #b996ff;
+  --sun: #ffd23f; --orange: #ff8a3d; --red: #ff5263; --red-text: #ff8a95; /* küçük kırmızı yazı: koyu panelde 4,5:1 üstü */ --green: #5fe39a; --teal: #3fe0c5; --sky: #63c7ff; --violet: #b996ff;
   --stroke: 3px;
   --pop: 4px 4px 0 var(--ink);
   --pop-sm: 3px 3px 0 var(--ink);
@@ -90,4 +90,4 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--sun); outli
 .toggle input:focus-visible + i { outline: 3px solid var(--sun); outline-offset: 2px; }
 
 .howto { padding-left: 20px; line-height: 1.5; } .howto li { margin-bottom: 8px; }
-.t-red { color: var(--red); font-weight: 700; } .t-orange { color: var(--orange); font-weight: 700; }
+.t-red { color: var(--red-text); font-weight: 700; } .t-orange { color: var(--orange); font-weight: 700; }

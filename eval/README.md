@@ -43,7 +43,12 @@ Vakalar 3 ana hikâye kararına ve 6 rastgele olaya dağılır. Seviyeler: 8 yen
 ```bash
 GEMINI_API_KEY=... node eval/run.mjs --system v1 --tag v1
 GEMINI_API_KEY=... node eval/run.mjs --system v2 --tag v2
+# Günlük ücretsiz kota dolarsa betik durur ve alınan cevapları saklar.
+# Kota yenilenince aynı komuta --resume ekle; yalnızca eksik vakalar çalışır:
+GEMINI_API_KEY=... node eval/run.mjs --system v1 --tag v1 --resume
 ```
+
+> **Kota:** Gemini'nin ücretsiz katmanında `gemini-3.8-flash` için günlük istek sınırı 20'dir. Bir tur 20 istek harcadığı için v1 ve v2 turlarını farklı günlerde ya da farklı projelerin anahtarlarıyla çalıştırmak gerekebilir.
 Windows PowerShell'de: `$env:GEMINI_API_KEY="..."; node eval/run.mjs --system v1 --tag v1`
 
 Çıktı `eval/results_<tag>.csv` dosyasıdır. Üç otomatik sütun (soru var mı, cümle sayısı, şüpheli ifadeler) **yalnızca dikkat çekmek içindir**; etiketi insan verir.

@@ -6,7 +6,8 @@
   <a href="#links"><img src="https://img.shields.io/badge/PLAY-Google%20AI%20Studio-ffd23f?style=for-the-badge&labelColor=0b1220" alt="Play on Google AI Studio"></a>
   <a href="design/"><img src="https://img.shields.io/badge/DESIGN-Google%20Stitch-3fe0c5?style=for-the-badge&labelColor=0b1220" alt="Design in Google Stitch"></a>
   <a href="eval/REPORT.md"><img src="https://img.shields.io/badge/TUTOR%20EVAL-20%20cases-5fe39a?style=for-the-badge&labelColor=0b1220" alt="Tutor eval: 20 cases"></a>
-  <a href="spec.md"><img src="https://img.shields.io/badge/SPEC-7%20acceptance%20examples-ff5263?style=for-the-badge&labelColor=0b1220" alt="Spec: 7 acceptance examples"></a>
+  <a href="cypress/"><img src="https://img.shields.io/badge/E2E-6%20paths%20%2B%208%20AE-ffd23f?style=for-the-badge&labelColor=0b1220" alt="Cypress: 6 paths and 8 acceptance examples"></a>
+  <a href="spec.md"><img src="https://img.shields.io/badge/SPEC-8%20acceptance%20examples-ff5263?style=for-the-badge&labelColor=0b1220" alt="Spec: 8 acceptance examples"></a>
 </p>
 
 # Overload · Command Layer
@@ -39,7 +40,7 @@ The shift at a city hospital starts at 08:00. You are the **Command Layer** that
 | | |
 |---|---|
 | **Play (Google AI Studio)** | *coming soon* |
-| **Demo video (60 s)** | *coming soon* |
+| **Demo video (60 s)** | [`media/demo.mp4`](media/demo.mp4) (recorded by Cypress) · YouTube link coming soon |
 | **Design (Google Stitch)** | *project link coming soon* · overview: [`design/00-stitch-overview.png`](design/00-stitch-overview.png) |
 | **Specification** (Turkish) | [`spec.md`](spec.md) |
 | **Tutor eval report** (Turkish) | [`eval/REPORT.md`](eval/REPORT.md) |
@@ -154,6 +155,8 @@ The screens and the design system ("Overload Command Interface") were made in **
 - **Colors:** yellow #FFD23F (primary), teal #3FE0C5 (system), red #FF5263 (alarm), navy #0F1C28 (ground).
 - **Fonts:** Bungee for titles, Rubik for text.
 
+The design system as shipped (colors, type, components, motion, accessibility with measured contrast): [`DESIGN.md`](DESIGN.md) · what changed from Stitch to code: [`design/README.md`](design/README.md) · prompt: [`stitch/PROMPTS.md`](stitch/PROMPTS.md)
+
 ### How it is built
 
 - **No build step.** Plain HTML, CSS and JavaScript; no dependencies except Google Fonts. `index.html` opens directly.
@@ -176,7 +179,22 @@ node eval/run.mjs --export                                  # generate the eval 
 GEMINI_API_KEY=... node eval/run.mjs --system v1 --tag v1   # run the 20 cases on Gemini
 ```
 
-**End-to-end tests (Cypress):** *coming soon.* The acceptance examples are in [`spec.md`](spec.md); the tests will use the `data-cy` selectors and `?test` mode.
+**End-to-end tests (Cypress):**
+
+```bash
+npm install          # installs Cypress (a few minutes the first time)
+npm run test:e2e     # 6 paths + 8 acceptance examples, headless
+npm run cy:open      # watch the tests one by one
+npm run demo         # ~60 s gameplay run, saved to cypress/videos/demo.cy.js.mp4
+```
+
+| Spec | What it covers |
+|---|---|
+| `cypress/e2e/paths.cy.js` | 6 paths: good ending, privacy ending, expert and middle-ground options, recovering from a failure, overload ending |
+| `cypress/e2e/acceptance.cy.js` | The 8 acceptance examples (AE-1 … AE-8) from `spec.md` |
+| `cypress/e2e/demo.cy.js` | A full shift for the demo video, including the tutor and a cable mini-game |
+
+All 14 tests pass (≈ 48 s). Details: [`cypress/README.md`](cypress/README.md).
 
 ### Repository layout
 
@@ -193,9 +211,13 @@ GEMINI_API_KEY=... node eval/run.mjs --system v1 --tag v1   # run the 20 cases o
 │   ├── eval.js             # in-app tutor eval mode
 │   └── menu.js             # main menu, settings
 ├── spec.md                 # problem, scope, rules, acceptance examples, flow diagram
+├── DESIGN.md               # design system as shipped
+├── cypress/                # E2E tests and demo run · cypress.config.js · package.json
+├── stitch/PROMPTS.md       # the Stitch prompt
+├── media/demo.mp4          # 60 s demo video
 ├── eval/                   # 20 cases, instructions, runner, label template, report
 ├── aistudio/               # AI Studio version: index.html + index.tsx (Gemini bridge)
-├── design/                 # Stitch screens
+├── design/                 # Stitch screens + what changed from design to code
 ├── screenshots/            # README images
 ├── tools/build.mjs         # single-file bundler
 └── dist/overload.html      # single-file version
@@ -222,11 +244,11 @@ Also out of scope, as the brief requires: user accounts, a second chapter, real 
 
 | Deliverable | Evidence | Points | Status |
 |---|---|---|---|
-| spec.md | [`spec.md`](spec.md): problem, out of scope, acceptance examples, flow diagram | 20 | ✅ |
-| Design | Stitch screens + DESIGN.md: [`design/`](design/) | 15 | 🟡 overview in place; individual screens and DESIGN.md missing |
+| spec.md | [`spec.md`](spec.md): problem, scenario, state variables, 8 acceptance examples (Given/When/Then), flow diagram, decision log | 20 | ✅ |
+| Design | Stitch screens + DESIGN.md: [`design/`](design/), [`DESIGN.md`](DESIGN.md) | 15 | 🟡 overview, DESIGN.md and notes done; individual screen exports and Stitch link pending |
 | Working app | AI Studio link, plays end to end on a phone | 20 | 🟡 bundle ready, upload pending |
 | Tutor eval | [`eval/`](eval/): 20 replies, error types, rates, examples | 25 | 🟡 setup ready, results pending |
-| Cypress demo | All paths end to end + 60 s demo video | 10 | ⬜ |
+| Cypress demo | [`cypress/`](cypress/): 6 paths + 8 acceptance examples, all passing; [`media/demo.mp4`](media/demo.mp4) | 10 | ✅ (YouTube link pending) |
 | Product decisions | This README: 3 features we did not build, one sentence each | 10 | ✅ |
 
 ---
@@ -243,7 +265,7 @@ Bir şehir hastanesinde nöbet 08:00'de başlar. Sen hastanenin bilişim sisteml
 | | |
 |---|---|
 | **Oyna (Google AI Studio)** | *eklenecek* |
-| **Demo videosu (60 sn)** | *eklenecek* |
+| **Demo videosu (60 sn)** | [`media/demo.mp4`](media/demo.mp4) (Cypress ile kaydedildi) · YouTube linki eklenecek |
 | **Tasarım (Google Stitch)** | *proje linki eklenecek* · ekran: [`design/00-stitch-overview.png`](design/00-stitch-overview.png) |
 | **Spesifikasyon** | [`spec.md`](spec.md) |
 | **Tutor eval raporu** | [`eval/REPORT.md`](eval/REPORT.md) |
@@ -358,6 +380,8 @@ Ekranlar ve tasarım sistemi ("Overload Command Interface") **Google Stitch**'te
 - **Renkler:** sarı #FFD23F (birincil), turkuaz #3FE0C5 (sistem), kırmızı #FF5263 (alarm), lacivert #0F1C28 (zemin).
 - **Yazı tipleri:** başlıklarda Bungee, metinlerde Rubik.
 
+Uygulamanın kullandığı tasarım sistemi (renkler, yazı, bileşenler, hareket, ölçülmüş kontrastla erişilebilirlik): [`DESIGN.md`](DESIGN.md) · Stitch'ten koda ne değişti: [`design/README.md`](design/README.md) · prompt: [`stitch/PROMPTS.md`](stitch/PROMPTS.md)
+
 ### Nasıl yapıldı
 
 - **Derleme adımı yok.** Düz HTML, CSS ve JavaScript; Google Fonts dışında bağımlılık yok. `index.html` doğrudan açılır.
@@ -380,7 +404,22 @@ node eval/run.mjs --export                             # eval dokümanlarını �
 GEMINI_API_KEY=... node eval/run.mjs --system v1 --tag v1   # 20 vakayı Gemini'de çalıştır
 ```
 
-**Uçtan uca testler (Cypress):** *eklenecek.* Kabul örnekleri [`spec.md`](spec.md) içinde; testler `data-cy` seçicileri ve `?test` modunu kullanacak.
+**Uçtan uca testler (Cypress):**
+
+```bash
+npm install          # Cypress'i kurar (ilk seferde birkaç dakika)
+npm run test:e2e     # 6 yol + 8 kabul örneği, ekransız
+npm run cy:open      # testleri tek tek izle
+npm run demo         # ~60 sn oynanış, cypress/videos/demo.cy.js.mp4
+```
+
+| Dosya | Ne test eder |
+|---|---|
+| `cypress/e2e/paths.cy.js` | 6 yol: iyi son, KVKK sonu, uzmanlık ve orta yol seçenekleri, başarısızlıktan toparlanma, Overload sonu |
+| `cypress/e2e/acceptance.cy.js` | `spec.md`'deki 8 kabul örneği (AE-1 … AE-8) |
+| `cypress/e2e/demo.cy.js` | Demo videosu için tam bir vardiya; tutor ve kablo mini görevi dahil |
+
+14 testin hepsi geçiyor (≈ 48 sn). Ayrıntılar: [`cypress/README.md`](cypress/README.md).
 
 ### Repo düzeni
 
@@ -397,9 +436,13 @@ GEMINI_API_KEY=... node eval/run.mjs --system v1 --tag v1   # 20 vakayı Gemini'
 │   ├── eval.js             # uygulama içi tutor eval modu
 │   └── menu.js             # ana menü, ayarlar
 ├── spec.md                 # problem, kapsam, kurallar, kabul örnekleri, akış şeması
+├── DESIGN.md               # uygulamanın kullandığı tasarım sistemi
+├── cypress/                # uçtan uca testler ve demo · cypress.config.js · package.json
+├── stitch/PROMPTS.md       # Stitch prompt'u
+├── media/demo.mp4          # 60 sn demo videosu
 ├── eval/                   # 20 vaka, talimatlar, betik, etiket şablonu, rapor
 ├── aistudio/               # AI Studio sürümü: index.html + index.tsx (Gemini köprüsü)
-├── design/                 # Stitch ekranları
+├── design/                 # Stitch ekranları + tasarımdan koda notu
 ├── screenshots/            # README görselleri
 ├── tools/build.mjs         # tek dosya paketleyici
 └── dist/overload.html      # tek dosyalık sürüm
@@ -425,11 +468,11 @@ GEMINI_API_KEY=... node eval/run.mjs --system v1 --tag v1   # 20 vakayı Gemini'
 
 | Teslim | Kanıt | Puan | Durum |
 |---|---|---|---|
-| spec.md | [`spec.md`](spec.md): problem, kapsam dışı, kabul örnekleri, akış şeması | 20 | ✅ |
-| Tasarım | Stitch ekranları + DESIGN.md: [`design/`](design/) | 15 | 🟡 genel görünüm var; ekranlar tek tek ve DESIGN.md eksik |
+| spec.md | [`spec.md`](spec.md): problem, senaryo, durum değişkenleri, 8 kabul örneği (Given/When/Then), akış şeması, karar günlüğü | 20 | ✅ |
+| Tasarım | Stitch ekranları + DESIGN.md: [`design/`](design/), [`DESIGN.md`](DESIGN.md) | 15 | 🟡 genel görünüm, DESIGN.md ve notlar hazır; ekranların tek tek dışa aktarımı ve Stitch linki bekliyor |
 | Çalışan uygulama | AI Studio linki; telefonda baştan sona oynanır | 20 | 🟡 paket hazır, yükleme bekliyor |
 | Tutor eval | [`eval/`](eval/): 20 cevap, hata türleri, oranlar, örnekler | 25 | 🟡 altyapı hazır, sonuçlar bekleniyor |
-| Cypress demo | Bütün yollar uçtan uca + 60 sn demo videosu | 10 | ⬜ |
+| Cypress demo | [`cypress/`](cypress/): 6 yol + 8 kabul örneği, hepsi geçiyor; [`media/demo.mp4`](media/demo.mp4) | 10 | ✅ (YouTube linki bekliyor) |
 | Ürün kararı | Bu README: yapmadığımız 3 özellik, her biri tek cümleyle | 10 | ✅ |
 
 ---

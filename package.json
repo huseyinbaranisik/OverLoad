@@ -1,0 +1,16 @@
+{
+  "name": "overload",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Overload: Komuta Katmanı · YZM301 SE Primer ödevi",
+  "scripts": {
+    "test:e2e": "cypress run --e2e --spec cypress/e2e/paths.cy.js,cypress/e2e/acceptance.cy.js",
+    "cy:open": "cypress open --e2e",
+    "demo": "cypress run --e2e --spec cypress/e2e/demo.cy.js",
+    "build": "node tools/build.mjs",
+    "eval:export": "node eval/run.mjs --export"
+  },
+  "devDependencies": {
+    "cypress": "16.2.0"
+  }
+}
