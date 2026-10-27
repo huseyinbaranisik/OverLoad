@@ -2,7 +2,7 @@
 //   node tools/build.mjs
 // Çıktılar:
 //   dist/overload.html   tek başına açılan sürüm (paylaşım, GitHub Pages); tutor hazır sorularla çalışır
-//   aistudio/index.html  AI Studio sürümü: aynı sayfa + @google/genai importmap + index.tsx (Gemini köprüsü)
+//   aistudio/index.html  AI Studio sürümü (Vite şablonu): aynı sayfa + src/main.tsx (Gemini köprüsü)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,6 +20,5 @@ if (left) throw new Error(`Gömülmeyen dosya kaldı: ${left.join(', ')}`);
 
 const out = (f, text) => { fs.mkdirSync(path.dirname(path.join(root, f)), { recursive: true }); fs.writeFileSync(path.join(root, f), text); console.log(`yazıldı: ${f} (${Math.round(text.length / 1024)} KB)`); };
 out('dist/overload.html', html);
-out('aistudio/index.html', html
-  .replace('</head>', '<script type="importmap">{"imports":{"@google/genai":"https://esm.sh/@google/genai@1.21.0"}}</script>\n</head>')
-  .replace('</body>', '<script type="module" src="/index.tsx"></script>\n</body>'));
+// AI Studio'nun Vite şablonu: giriş noktası src/main.tsx (Gemini köprüsü); @google/genai'yi Vite paketler
+out('aistudio/index.html', html.replace('</body>', '<script type="module" src="/src/main.tsx"></script>\n</body>'));

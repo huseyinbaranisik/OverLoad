@@ -468,7 +468,6 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--sun); outli
 
 .reduce-motion .float-num { animation-duration: .6s; }
 </style>
-<script type="importmap">{"imports":{"@google/genai":"https://esm.sh/@google/genai@1.21.0"}}</script>
 </head>
 <body>
 <div id="tv">
@@ -1212,7 +1211,7 @@ function browserKey() {
   if (!hasWindow()) return '';
   try { return window.GEMINI_API_KEY || localStorage.getItem('GEMINI_API_KEY') || ''; } catch { return ''; }
 }
-// Hangi model yolu açık? AI Studio'da index.tsx window.askTutor'u tanımlar.
+// Hangi model yolu açık? AI Studio'da aistudio/src/main.tsx window.askTutor'u tanımlar.
 function tutorBackend() {
   if (hasWindow() && typeof window.askTutor === 'function') return 'köprü';
   return browserKey() ? 'anahtar' : '';
@@ -2099,6 +2098,6 @@ $('[data-cy=play]').onclick = e => {
 };
 renderChips(); applyFx();
 </script>
-<script type="module" src="/index.tsx"></script>
+<script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

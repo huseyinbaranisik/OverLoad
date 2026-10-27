@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --surface: #071420;
+    --surface-low: #101d29;
+    --surface-container: #14212d;
+    --surface-high: #1e2b38;
+    --surface-highest: #293643;
+    --surface-lowest: #030f1b;
+    --ink: #0b1220;
+    --primary: #fff2d7;
+    --primary-container: #ffd23f;
+    --on-primary: #3d2f00;
+    --secondary: #3fe0c5;
+    --secondary-container: #00c4aa;
+    --on-secondary: #00382f;
+    --error: #ff5263;
+    --error-container: #93000a;
+    --hazard: #ff8a3d;
+    --success: #5fe39a;
+  }
+
+  body {
+    background-color: var(--surface);
+    color: #d6e4f5;
+    font-family: 'Rubik', sans-serif;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+.font-arcade {
+  font-family: 'Bungee', cursive;
+}
+
+.font-rubik {
+  font-family: 'Rubik', sans-serif;
+}
+
+/* CRT Scanlines and Vignette overlay */
+.crt-scanlines {
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%),
+              linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.03));
+  background-size: 100% 3px, 6px 100%;
+}
+
+.crt-vignette {
+  box-shadow: inset 0 0 80px rgba(3, 15, 27, 0.85);
+}
+
+/* Chunky brutalist shadows */
+.brutal-shadow-sm {
+  box-shadow: 2px 2px 0 #0b1220;
+}
+
+.brutal-shadow {
+  box-shadow: 3px 3px 0 #0b1220;
+}
+
+.brutal-shadow-lg {
+  box-shadow: 4px 4px 0 #0b1220;
+}
+
+.brutal-shadow-btn {
+  box-shadow: 0 6px 0 #0b1220;
+}
+
+.brutal-btn-active:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #0b1220;
+}
+
+/* Hide scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

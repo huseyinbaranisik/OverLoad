@@ -2,20 +2,24 @@
 
 **Stitch projesi:** *link eklenecek*
 
-Ekranlar, [`../stitch/PROMPTS.md`](../stitch/PROMPTS.md) içindeki prompt ile aynı Stitch projesinde üretildi. Stitch ayrıca **Overload Command Interface** adlı bir tasarım sistemi çıkardı.
+Ekranlar, [`../stitch/PROMPTS.md`](../stitch/PROMPTS.md) içindeki prompt ile aynı Stitch projesinde üretildi.
 
 ![Stitch projesinin genel görünümü: tasarım sistemi ve üç ekran](00-stitch-overview.png)
 
-| Ekran | Stitch | Uygulamada |
-|---|---|---|
-| Tasarım sistemi | genel görünümde, solda | [`../DESIGN.md`](../DESIGN.md) |
-| 01 · Giriş (Ana Menü) | genel görünümde, 2. sırada · *`01-giris.png` eklenecek* | Ana menü (`play`) |
-| 02 · Oyun Sahnesi (Harita) | genel görünümde, 3. sırada · *`02-sahne.png` eklenecek* | Vardiya ekranı (`marker-*`, `agent-*`) |
-| 03 · Bitiş Ekranı | genel görünümde, 4. sırada · *`03-son.png` eklenecek* | Son ekranı (`end-title`) |
+| Ekran | Stitch görseli | Stitch HTML çıktısı | Uygulamada |
+|---|---|---|---|
+| Genel görünüm + tasarım sistemi | [`00-stitch-overview.png`](00-stitch-overview.png) | [`DESIGN.stitch.md`](DESIGN.stitch.md) | [`../DESIGN.md`](../DESIGN.md) |
+| 01 · Giriş (Ana Menü) | [`01-giris.png`](01-giris.png) | [`01-giris.stitch.html`](01-giris.stitch.html) | Ana menü (`play`) |
+| 02 · Oyun Sahnesi (Harita) | [`02-sahne.png`](02-sahne.png) | [`02-sahne.stitch.html`](02-sahne.stitch.html) | Vardiya ekranı (`marker-*`, `agent-*`) |
+| 03 · Bitiş Ekranı | [`03-son.png`](03-son.png) | [`03-son.stitch.html`](03-son.stitch.html) | Son ekranı (`end-title`) |
 
-Ödev üç ekran istiyor: giriş, sahne, son. Stitch'in tasarım sistemi sayfası dördüncü pano olarak yer alıyor.
+<p align="center"><img src="01-giris.png" width="30%" alt="Stitch: giriş"> <img src="02-sahne.png" width="30%" alt="Stitch: oyun sahnesi"> <img src="03-son.png" width="30%" alt="Stitch: bitiş ekranı"></p>
 
-Kök dizindeki [`DESIGN.md`](../DESIGN.md), uygulamanın gerçekte kullandığı değerleri anlatır. Stitch kendi DESIGN.md dosyasını verirse `DESIGN.stitch.md` olarak bu klasöre konur.
+Ödev üç ekran istiyor: giriş, sahne, son. Stitch ayrıca **Overload Command Interface** tasarım sistemini üretti; kendi DESIGN.md'si [`DESIGN.stitch.md`](DESIGN.stitch.md) olarak duruyor.
+
+Bu ekranlar ve spec, AI Studio'ya verildi; Gemini'nin ilk ürettiği React maketi süreç kanıtı olarak [`../aistudio/gemini-ilk-surum/`](../aistudio/gemini-ilk-surum/) klasöründe.
+
+Kök dizindeki [`DESIGN.md`](../DESIGN.md), uygulamanın gerçekte kullandığı değerleri anlatır; Stitch'inkiyle yan yana durması, tasarımdan koda neyin değiştiğini gösterir.
 
 ## Tasarımdan koda: ne kaldı, ne değişti
 

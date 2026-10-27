@@ -1211,7 +1211,7 @@ function browserKey() {
   if (!hasWindow()) return '';
   try { return window.GEMINI_API_KEY || localStorage.getItem('GEMINI_API_KEY') || ''; } catch { return ''; }
 }
-// Hangi model yolu açık? AI Studio'da index.tsx window.askTutor'u tanımlar.
+// Hangi model yolu açık? AI Studio'da aistudio/src/main.tsx window.askTutor'u tanımlar.
 function tutorBackend() {
   if (hasWindow() && typeof window.askTutor === 'function') return 'köprü';
   return browserKey() ? 'anahtar' : '';

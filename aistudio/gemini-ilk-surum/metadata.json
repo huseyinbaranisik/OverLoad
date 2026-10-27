@@ -1,0 +1,6 @@
+{
+  "name": "Overload: Şehir Hastanesi Komuta Merkezi",
+  "description": "Taktiksel hastane IT kriz ve AI ajan sevk simülasyonu. Aşırı yükü yönet, mimari kararlar ver ve sistemi ayakta tut.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

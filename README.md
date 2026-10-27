@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="#links"><img src="https://img.shields.io/badge/PLAY-Google%20AI%20Studio-ffd23f?style=for-the-badge&labelColor=0b1220" alt="Play on Google AI Studio"></a>
+  <a href="https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519"><img src="https://img.shields.io/badge/PLAY-Google%20AI%20Studio-ffd23f?style=for-the-badge&labelColor=0b1220" alt="Play on Google AI Studio"></a>
   <a href="design/"><img src="https://img.shields.io/badge/DESIGN-Google%20Stitch-3fe0c5?style=for-the-badge&labelColor=0b1220" alt="Design in Google Stitch"></a>
   <a href="eval/REPORT.md"><img src="https://img.shields.io/badge/TUTOR%20EVAL-20%20cases-5fe39a?style=for-the-badge&labelColor=0b1220" alt="Tutor eval: 20 cases"></a>
   <a href="cypress/"><img src="https://img.shields.io/badge/E2E-6%20paths%20%2B%208%20AE-ffd23f?style=for-the-badge&labelColor=0b1220" alt="Cypress: 6 paths and 8 acceptance examples"></a>
@@ -39,9 +39,9 @@ The shift at a city hospital starts at 08:00. You are the **Command Layer** that
 
 | | |
 |---|---|
-| **Play (Google AI Studio)** | *coming soon* |
-| **Demo video (60 s)** | [`media/demo.mp4`](media/demo.mp4) (recorded by Cypress) · YouTube link coming soon |
-| **Design (Google Stitch)** | *project link coming soon* · overview: [`design/00-stitch-overview.png`](design/00-stitch-overview.png) |
+| **Play (Google AI Studio)** | https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519 |
+| **Demo video (60 s)** | https://youtu.be/fxyTmpdYf20 (recorded by Cypress) · file: [`media/demo.mp4`](media/demo.mp4) |
+| **Design (Google Stitch)** | screens and exports in [`design/`](design/) · Stitch project link coming soon |
 | **Specification** (Turkish) | [`spec.md`](spec.md) |
 | **Tutor eval report** (Turkish) | [`eval/REPORT.md`](eval/REPORT.md) |
 
@@ -163,7 +163,7 @@ The design system as shipped (colors, type, components, motion, accessibility wi
 - **Files split by responsibility:** `js/data/` content (agents, story, incidents, eval cases), `js/tutor.js` the tutor (never touches the DOM, also runs in Node), `js/game.js` the game loop, `js/minigames.js`, `js/ui/` (CRT transition, sound, hit effects), `js/eval.js` the eval mode.
 - **Map:** an oblique bird's-eye city drawn in SVG. Agents drive along the roads and leave trails.
 - **Game loop:** a single `tick` once per second. It advances the clock, spawns story calls and random incidents, ages incidents, and updates Overload, energy and cooldowns. While a window is open, time stops (except the decision timer in experienced mode).
-- **Tutor bridge:** the game calls `window.askTutor({ system, prompt })` if it exists. In AI Studio, [`aistudio/index.tsx`](aistudio/index.tsx) defines it with `@google/genai`; the API key never appears in the code.
+- **Tutor bridge:** the game calls `window.askTutor({ system, prompt })` if it exists. In AI Studio, [`aistudio/src/main.tsx`](aistudio/src/main.tsx) defines it with `@google/genai`, using the key from AI Studio's Secrets panel; the key is never in the repository.
 - **Single-file bundle:** `node tools/build.mjs` inlines the CSS and JS: `aistudio/index.html` (AI Studio) and `dist/overload.html`.
 - **Test hooks:** `?test` (no dice, short animations, no Overload drain or random incidents), `?test&side`, `?timer=5`. Every interactive element has a `data-cy`.
 
@@ -216,7 +216,7 @@ All 14 tests pass (≈ 48 s). Details: [`cypress/README.md`](cypress/README.md).
 ├── stitch/PROMPTS.md       # the Stitch prompt
 ├── media/demo.mp4          # 60 s demo video
 ├── eval/                   # 20 cases, instructions, runner, label template, report
-├── aistudio/               # AI Studio version: index.html + index.tsx (Gemini bridge)
+├── aistudio/               # AI Studio version (Vite): index.html + src/main.tsx (Gemini bridge) + Gemini's first draft
 ├── design/                 # Stitch screens + what changed from design to code
 ├── screenshots/            # README images
 ├── tools/build.mjs         # single-file bundler
@@ -245,10 +245,10 @@ Also out of scope, as the brief requires: user accounts, a second chapter, real 
 | Deliverable | Evidence | Points | Status |
 |---|---|---|---|
 | spec.md | [`spec.md`](spec.md): problem, scenario, state variables, 8 acceptance examples (Given/When/Then), flow diagram, decision log | 20 | ✅ |
-| Design | Stitch screens + DESIGN.md: [`design/`](design/), [`DESIGN.md`](DESIGN.md) | 15 | 🟡 overview, DESIGN.md and notes done; individual screen exports and Stitch link pending |
-| Working app | AI Studio link, plays end to end on a phone | 20 | 🟡 bundle ready, upload pending |
+| Design | Stitch screens, HTML exports and Stitch's DESIGN.md in [`design/`](design/); shipped system in [`DESIGN.md`](DESIGN.md) | 15 | ✅ (Stitch project link pending) |
+| Working app | [AI Studio link](https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519), plays end to end on a phone | 20 | 🟡 link live; replace Gemini's first draft with [`aistudio/`](aistudio/) |
 | Tutor eval | [`eval/`](eval/): 20 replies, error types, rates, examples | 25 | 🟡 setup ready, results pending |
-| Cypress demo | [`cypress/`](cypress/): 6 paths + 8 acceptance examples, all passing; [`media/demo.mp4`](media/demo.mp4) | 10 | ✅ (YouTube link pending) |
+| Cypress demo | [`cypress/`](cypress/): 6 paths + 8 acceptance examples, all passing; [demo video](https://youtu.be/fxyTmpdYf20) | 10 | ✅ |
 | Product decisions | This README: 3 features we did not build, one sentence each | 10 | ✅ |
 
 ---
@@ -264,9 +264,9 @@ Bir şehir hastanesinde nöbet 08:00'de başlar. Sen hastanenin bilişim sisteml
 
 | | |
 |---|---|
-| **Oyna (Google AI Studio)** | *eklenecek* |
-| **Demo videosu (60 sn)** | [`media/demo.mp4`](media/demo.mp4) (Cypress ile kaydedildi) · YouTube linki eklenecek |
-| **Tasarım (Google Stitch)** | *proje linki eklenecek* · ekran: [`design/00-stitch-overview.png`](design/00-stitch-overview.png) |
+| **Oyna (Google AI Studio)** | https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519 |
+| **Demo videosu (60 sn)** | https://youtu.be/fxyTmpdYf20 (Cypress ile kaydedildi) · dosya: [`media/demo.mp4`](media/demo.mp4) |
+| **Tasarım (Google Stitch)** | ekranlar ve çıktılar [`design/`](design/) klasöründe · Stitch proje linki eklenecek |
 | **Spesifikasyon** | [`spec.md`](spec.md) |
 | **Tutor eval raporu** | [`eval/REPORT.md`](eval/REPORT.md) |
 
@@ -388,7 +388,7 @@ Uygulamanın kullandığı tasarım sistemi (renkler, yazı, bileşenler, hareke
 - **Dosyalar sorumluluğa göre ayrılmış:** `js/data/` içerik (ajanlar, hikâye, olaylar, eval vakaları), `js/tutor.js` tutor (DOM'a dokunmaz, Node'da da çalışır), `js/game.js` oyun döngüsü, `js/minigames.js`, `js/ui/` (CRT geçişi, ses, darbe efektleri), `js/eval.js` eval modu.
 - **Harita:** SVG ile çizilmiş eğik kuş bakışı şehir. Ajanlar yollar üzerinden gider ve iz bırakır.
 - **Oyun döngüsü:** saniyede bir çalışan tek bir `tick`. Saati ilerletir, hikâye çağrılarını ve rastgele olayları üretir, olayları yaşlandırır, Overload'u ve enerji/soğumayı günceller. Bir pencere açıkken (deneyimli moddaki karar sayacı hariç) zaman durur.
-- **Tutor köprüsü:** oyun `window.askTutor({ system, prompt })` varsa onu çağırır. AI Studio'da [`aistudio/index.tsx`](aistudio/index.tsx) bu fonksiyonu `@google/genai` ile tanımlar; anahtar kodda durmaz.
+- **Tutor köprüsü:** oyun `window.askTutor({ system, prompt })` varsa onu çağırır. AI Studio'da [`aistudio/src/main.tsx`](aistudio/src/main.tsx) bu fonksiyonu `@google/genai` ile ve AI Studio'nun Secrets panelindeki anahtarla tanımlar; anahtar repoda durmaz.
 - **Tek dosya paketi:** `node tools/build.mjs`, CSS ve JS'i sayfaya gömer: `aistudio/index.html` (AI Studio) ve `dist/overload.html`.
 - **Test kancaları:** `?test` (zar yok, kısa animasyon, Overload artışı ve rastgele olay yok), `?test&side`, `?timer=5`. Etkileşimli her öğede `data-cy` vardır.
 
@@ -441,7 +441,7 @@ npm run demo         # ~60 sn oynanış, cypress/videos/demo.cy.js.mp4
 ├── stitch/PROMPTS.md       # Stitch prompt'u
 ├── media/demo.mp4          # 60 sn demo videosu
 ├── eval/                   # 20 vaka, talimatlar, betik, etiket şablonu, rapor
-├── aistudio/               # AI Studio sürümü: index.html + index.tsx (Gemini köprüsü)
+├── aistudio/               # AI Studio sürümü (Vite): index.html + src/main.tsx (Gemini köprüsü) + Gemini'nin ilk sürümü
 ├── design/                 # Stitch ekranları + tasarımdan koda notu
 ├── screenshots/            # README görselleri
 ├── tools/build.mjs         # tek dosya paketleyici
@@ -469,10 +469,10 @@ npm run demo         # ~60 sn oynanış, cypress/videos/demo.cy.js.mp4
 | Teslim | Kanıt | Puan | Durum |
 |---|---|---|---|
 | spec.md | [`spec.md`](spec.md): problem, senaryo, durum değişkenleri, 8 kabul örneği (Given/When/Then), akış şeması, karar günlüğü | 20 | ✅ |
-| Tasarım | Stitch ekranları + DESIGN.md: [`design/`](design/), [`DESIGN.md`](DESIGN.md) | 15 | 🟡 genel görünüm, DESIGN.md ve notlar hazır; ekranların tek tek dışa aktarımı ve Stitch linki bekliyor |
-| Çalışan uygulama | AI Studio linki; telefonda baştan sona oynanır | 20 | 🟡 paket hazır, yükleme bekliyor |
+| Tasarım | Stitch ekranları, HTML çıktıları ve Stitch'in DESIGN.md'si [`design/`](design/) içinde; uygulamanın sistemi [`DESIGN.md`](DESIGN.md) | 15 | ✅ (Stitch proje linki bekliyor) |
+| Çalışan uygulama | [AI Studio linki](https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519); telefonda baştan sona oynanır | 20 | 🟡 link hazır; Gemini'nin ilk sürümü [`aistudio/`](aistudio/) ile değiştirilecek |
 | Tutor eval | [`eval/`](eval/): 20 cevap, hata türleri, oranlar, örnekler | 25 | 🟡 altyapı hazır, sonuçlar bekleniyor |
-| Cypress demo | [`cypress/`](cypress/): 6 yol + 8 kabul örneği, hepsi geçiyor; [`media/demo.mp4`](media/demo.mp4) | 10 | ✅ (YouTube linki bekliyor) |
+| Cypress demo | [`cypress/`](cypress/): 6 yol + 8 kabul örneği, hepsi geçiyor; [demo videosu](https://youtu.be/fxyTmpdYf20) | 10 | ✅ |
 | Ürün kararı | Bu README: yapmadığımız 3 özellik, her biri tek cümleyle | 10 | ✅ |
 
 ---

@@ -1,25 +1,38 @@
 # Google AI Studio sürümü
 
-Bu klasördeki iki dosya, oyunun AI Studio'da çalışan sürümüdür:
+**Uygulama:** https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519
+
+Bu klasör, oyunun AI Studio'daki **Vite şablonuna** uyarlanmış hâlidir:
 
 | Dosya | Ne |
 |---|---|
-| `index.html` | Oyunun tamamı tek dosyada (CSS ve JS gömülü) + `@google/genai` importmap + `index.tsx` bağlantısı. **Elle düzenleme**: `node tools/build.mjs` ile üretilir. |
-| `index.tsx` | Gemini köprüsü: `window.askTutor({ system, prompt })` fonksiyonunu tanımlar. Anahtarı AI Studio sağlar; kodda anahtar yoktur. |
+| `index.html` | Oyunun tamamı tek dosyada (CSS ve JS gömülü) + `src/main.tsx` bağlantısı. **Elle düzenleme**: `node tools/build.mjs` ile üretilir. |
+| `src/main.tsx` | Gemini köprüsü: `window.askTutor({ system, prompt })` fonksiyonunu `@google/genai` ile tanımlar. |
+| `vite.config.ts` | AI Studio'nun Secrets panelindeki `GEMINI_API_KEY`'i `src/main.tsx`'e yerleştirir. |
+| `package.json`, `tsconfig.json`, `.env.example` | Şablonun ayarları (sadeleştirilmiş). |
+| `gemini-ilk-surum/` | **Süreç kanıtı:** Stitch ekranları ve spec verildiğinde Gemini'nin AI Studio'da ilk ürettiği React sürümü. Görsel bir maket; tutor, üç karar akışı ve sonlar yok. |
 
-Oyun, tutor'a sorarken bu fonksiyon varsa onu kullanır (`js/tutor.js` > `tutorReply`). Yoksa ya da model hata verirse olayın hazır Sokratik sorularına düşer ve tutor kutusunun altında bunu yazar.
+Oyun, tutor'a sorarken köprü varsa onu kullanır (`js/tutor.js` > `tutorReply`). Anahtar yoksa ya da model hata verirse olayın hazır Sokratik sorularına düşer ve tutor kutusunun altında bunu yazar.
 
-## Yükleme
+## AI Studio'daki uygulamayı bu sürümle değiştirmek
 
 1. Oyunda değişiklik yaptıysan önce paketle: `node tools/build.mjs`
-2. [aistudio.google.com](https://aistudio.google.com) > **Build** > yeni bir uygulama aç.
-3. Kod düzenleyicide `index.html` dosyasının içeriğini bu klasördeki `index.html` ile değiştir.
-4. `index.tsx` dosyasının içeriğini bu klasördeki `index.tsx` ile değiştir. AI Studio'nun oluşturduğu başka dosyalar (ör. `App.tsx`) varsa ve `index.tsx` artık onları içe aktarmıyorsa silebilirsin.
-5. Önizlemede oyunu aç; bir karar penceresinde **🎓 Tutor'a sor** kutusunun altında "Cevaplar Gemini'den geliyor." yazmalı.
-6. Paylaş / dağıt ile linki al ve README'deki "Oyna" satırına ekle. Linki telefonda baştan sona oynayarak dene.
+2. AI Studio'da uygulamayı aç, kod görünümüne (`<>`) geç.
+3. Şu üç dosyanın içeriğini bu klasördekilerle değiştir:
+   - `index.html`
+   - `src/main.tsx`
+   - `vite.config.ts`
+4. Gemini'nin ürettiği diğer dosyalar (`src/App.tsx`, `src/components/`, `src/data/`, `src/services/`, `src/types.ts`, `src/index.css`) artık kullanılmaz; silebilirsin.
+5. Önizlemede oyunu aç. Bir karar penceresinde **🎓 Tutor'a sor** kutusunun altında "Cevaplar Gemini'den geliyor." yazmalı. Ana menüdeki **Tutor eval modu** ise "Model bağlı" demeli.
+6. Linki telefonda baştan sona oynayarak dene.
+
+## ⚠ Anahtar güvenliği
+
+Bu sürümde tutor tarayıcıdan Gemini'ye bağlanır. `vite.config.ts`, anahtarı derlenen JavaScript dosyasına yerleştirir. Yerel testte bunu sahte bir anahtarla doğruladık: anahtar paketin içinde düz metin olarak duruyor.
+
+- AI Studio'da **Share** ile paylaşılan link, AI Studio'nun kendi ortamında açılır; anahtar Secrets panelinde kalır.
+- Uygulamayı **Publish** ile herkese açık bir siteye çıkarırsan anahtar sayfanın kaynağından okunabilir. Yayınlayacaksan ayrı bir anahtar kullan, Google Cloud'da bu anahtara kota sınırı koy ve ödev notlandıktan sonra anahtarı sil.
 
 ## Tutor eval
 
-AI Studio sürümünde ana menünün altındaki **Tutor eval modu** 20 vakayı Gemini'ye gönderir. Ayrıntılar: `eval/README.md`.
-
-> Not: AI Studio'nun Build ortamı zamanla değişebilir. Düz HTML'i çalıştırmazsa, oyunu React proje yapısına uyarlamak gerekebilir.
+Ana menünün altındaki **Tutor eval modu** 20 vakayı Gemini'ye gönderir. Ayrıntılar: `eval/README.md`.
