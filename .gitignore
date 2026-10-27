@@ -1,0 +1,13 @@
+# bağımlılıklar (Cypress)
+node_modules/
+
+# yerel araç ve test çıktıları
+.claude/
+.playwright-mcp/
+cypress/videos/
+cypress/screenshots/
+*.log
+
+# gizli anahtarlar asla repoya girmesin
+.env
+.env.*

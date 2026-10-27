@@ -1,0 +1,40 @@
+/* Sürekli CRT dokusu: tarama çizgileri + köşe kararması + hafif titreme */
+.crt-overlay {
+  position: absolute; inset: 0; pointer-events: none; z-index: 30;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 2px, #00000038 2px 3px),
+    radial-gradient(ellipse at center, transparent 58%, #000000a8 100%);
+  animation: flicker 4s steps(1) infinite;
+}
+@keyframes flicker { 0%, 100% { opacity: 1; } 47% { opacity: .9; } 48% { opacity: 1; } 83% { opacity: .95; } }
+.no-scan .crt-overlay { display: none; }
+
+/* Kapanış: ekran parlak bir yatay çizgiye ezilir, çizgi noktaya küçülüp söner */
+.crt-off { animation: crtOff .5s cubic-bezier(.55, 0, .9, .4) forwards; }
+@keyframes crtOff {
+  0%   { transform: scale(1, 1); filter: brightness(1); opacity: 1; }
+  55%  { transform: scale(1, .006); filter: brightness(3.5); opacity: 1; }
+  85%  { transform: scale(.02, .006); filter: brightness(5); opacity: 1; }
+  100% { transform: scale(0, 0); filter: brightness(6); opacity: 0; }
+}
+/* Açılış: önce yatay çizgi açılır, sonra ekran dikeyde büyür */
+.crt-on { animation: crtOn .55s cubic-bezier(.2, .7, .3, 1) both; }
+@keyframes crtOn {
+  0%   { transform: scale(0, .006); filter: brightness(5); opacity: 1; }
+  45%  { transform: scale(1, .006); filter: brightness(3.5); }
+  100% { transform: scale(1, 1); filter: brightness(1); }
+}
+
+/* Hareketi azalt: aynı sınıflar sade solmaya döner */
+.reduce-motion .crt-off { animation: fadeOut .2s forwards; }
+.reduce-motion .crt-on { animation: fadeIn .2s both; }
+.reduce-motion .crt-overlay { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .crt-off { animation: fadeOut .2s forwards; }
+  .crt-on { animation: fadeIn .2s both; }
+  .crt-overlay, .r-sweep, .glow, .live i { animation: none !important; }
+}
+@keyframes fadeOut { to { opacity: 0; } }
+@keyframes fadeIn { from { opacity: 0; } }
+
+.test .crt-off, .test .crt-on { animation-duration: 1ms; }

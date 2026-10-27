@@ -1,0 +1,55 @@
+/* Darbe efektleri (js/ui/juice.js) */
+#hitFlash { position: absolute; inset: 0; z-index: 25; pointer-events: none; opacity: 0; }
+#hitFlash.hit, #hitFlash.hit-big { background: radial-gradient(ellipse at center, transparent 35%, #ff1f3dcc 100%); }
+#hitFlash.hit { animation: flash .45s ease-out; }
+#hitFlash.hit-big { animation: flashBig .7s ease-out; }
+#hitFlash.heal { background: radial-gradient(ellipse at center, transparent 50%, #5fe39a88 100%); animation: flash .5s ease-out; }
+@keyframes flash { 0% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes flashBig { 0% { opacity: 1; background-color: #ffffff30; } 15% { background-color: transparent; } 100% { opacity: 0; } }
+
+/* ekran sarsıntısı */
+.shake { animation: shake .38s cubic-bezier(.36, .07, .19, .97); }
+.shake-l { animation: shakeL .6s cubic-bezier(.36, .07, .19, .97); }
+@keyframes shake {
+  10%, 90% { transform: translate(-1px, 1px); }
+  20%, 80% { transform: translate(3px, -2px); }
+  30%, 50%, 70% { transform: translate(-5px, 2px); }
+  40%, 60% { transform: translate(5px, -1px); }
+}
+@keyframes shakeL {
+  10%, 90% { transform: translate(-2px, 2px) rotate(-.4deg); }
+  20%, 80% { transform: translate(6px, -4px) rotate(.6deg); }
+  30%, 50%, 70% { transform: translate(-9px, 4px) rotate(-.8deg); }
+  40%, 60% { transform: translate(9px, -2px) rotate(.6deg); }
+}
+
+/* kısa RGB kayması (kromatik sapma) */
+.aberr { animation: aberr .36s steps(3); }
+@keyframes aberr {
+  0%, 100% { filter: none; }
+  33% { filter: drop-shadow(4px 0 0 #ff0040aa) drop-shadow(-4px 0 0 #00e5ffaa); }
+  66% { filter: drop-shadow(-2px 0 0 #ff0040aa) drop-shadow(2px 0 0 #00e5ffaa); }
+}
+
+/* bar dolunca beyaz parlama, soğuyunca yeşil */
+#heatFill.bump { animation: barBump .4s ease-out; }
+#heatFill.cool { animation: barCool .5s ease-out; }
+@keyframes barBump { 0% { filter: brightness(3); } 100% { filter: none; } }
+@keyframes barCool { 0% { filter: brightness(2) hue-rotate(-60deg); } 100% { filter: none; } }
+
+/* bardan çıkan uçan sayı */
+.float-num {
+  position: fixed; z-index: 40; pointer-events: none; transform: translateX(-50%);
+  font-family: var(--display); font-size: 22px; text-shadow: 2px 2px 0 var(--ink), -1px -1px 0 var(--ink), 1px -1px 0 var(--ink), -1px 1px 0 var(--ink);
+  animation: floatUp 1.1s ease-out forwards;
+}
+.float-num.up { color: var(--red); }
+.float-num.down { color: var(--green); }
+@keyframes floatUp {
+  0% { opacity: 0; transform: translate(-50%, 6px) scale(.6); }
+  15% { opacity: 1; transform: translate(-50%, 0) scale(1.35); }
+  30% { transform: translate(-50%, 4px) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, 34px); }
+}
+
+.reduce-motion .float-num { animation-duration: .6s; }

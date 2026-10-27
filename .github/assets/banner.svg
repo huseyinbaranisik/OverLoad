@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" role="img" aria-label="Overload: Komuta Katmanı">
+  <defs>
+    <pattern id="dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.2" fill="#ffffff" opacity=".06"/></pattern>
+    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1.4" fill="#000" opacity=".22"/></pattern>
+    <radialGradient id="vig" cx="50%" cy="50%" r="70%"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".65"/></radialGradient>
+    <radialGradient id="alarm"><stop offset="0" stop-color="#ff5263" stop-opacity=".7"/><stop offset="1" stop-color="#ff5263" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1200" height="300" fill="#0f1c28"/>
+  <rect width="1200" height="300" fill="url(#dots)"/>
+  <!-- yeşil şehir ızgarası -->
+  <g transform="translate(760 40)">
+    <rect width="400" height="220" rx="14" fill="#163626" stroke="#0b1220" stroke-width="5"/>
+    <g fill="#0b1d14"><rect x="0" y="66" width="400" height="16"/><rect x="0" y="146" width="400" height="16"/><rect x="128" y="0" width="16" height="220"/><rect x="262" y="0" width="16" height="220"/></g>
+    <g stroke="#c9f7a8" stroke-opacity=".45" stroke-width="2" stroke-dasharray="8 8"><path d="M0 74H400M0 154H400M136 0V220M270 0V220"/></g>
+    <g stroke="#0b1220" stroke-width="3">
+      <rect x="18" y="12" width="92" height="44" rx="4" fill="#9fe6a8"/><rect x="156" y="12" width="92" height="44" rx="4" fill="#d4fbb8"/><rect x="292" y="12" width="92" height="44" rx="4" fill="#9fe6a8"/>
+      <rect x="18" y="92" width="92" height="44" rx="4" fill="#9fe6a8"/><rect x="156" y="92" width="92" height="44" rx="4" fill="#d4fbb8"/><rect x="292" y="92" width="92" height="44" rx="4" fill="#9fe6a8"/>
+      <rect x="18" y="172" width="92" height="38" rx="4" fill="#9fe6a8"/><rect x="156" y="172" width="92" height="38" rx="4" fill="#9fe6a8"/><rect x="292" y="172" width="92" height="38" rx="4" fill="#d4fbb8"/>
+    </g>
+    <!-- ajan izi: merkezden olaya -->
+    <path d="M202 114 V154 H270 V74 H338" fill="none" stroke="#8f7cf6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+      <animate attributeName="stroke-dasharray" values="0 400;400 0" dur="2.4s" repeatCount="indefinite"/>
+    </path>
+    <circle cx="338" cy="34" r="46" fill="url(#alarm)"><animate attributeName="opacity" values="1;.4;1" dur="1.4s" repeatCount="indefinite"/></circle>
+    <path d="M338 16 L356 46 L320 46Z" fill="#ff5263" stroke="#0b1220" stroke-width="3" stroke-linejoin="round"/>
+    <text x="338" y="43" font-family="Arial Black, sans-serif" font-size="16" text-anchor="middle" fill="#0b1220">!</text>
+    <circle cx="64" cy="114" r="34" fill="url(#alarm)" opacity=".7"/>
+    <path d="M64 100 L78 124 L50 124Z" fill="#ff8a3d" stroke="#0b1220" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+  <!-- logo -->
+  <g font-family="Bungee, 'Arial Black', Impact, sans-serif">
+    <rect x="70" y="52" width="230" height="30" rx="6" fill="#ff5263" stroke="#0b1220" stroke-width="3" transform="rotate(-2 185 67)"/>
+    <text x="185" y="73" font-family="Arial, sans-serif" font-weight="800" font-size="15" letter-spacing="2" text-anchor="middle" fill="#fff" transform="rotate(-2 185 67)">YZM301 · SE PRIMER</text>
+    <text x="64" y="186" font-size="96" fill="#0b1220">OVER</text>
+    <text x="58" y="180" font-size="96" fill="#f5ecd7" stroke="#0b1220" stroke-width="4" paint-order="stroke">OVER</text>
+    <text x="366" y="186" font-size="96" fill="#0b1220">LOAD</text>
+    <text x="360" y="180" font-size="96" fill="#ff5263" stroke="#0b1220" stroke-width="4" paint-order="stroke">LOAD</text>
+    <text x="62" y="226" font-family="Arial, sans-serif" font-weight="800" font-size="20" letter-spacing="7" fill="#3fe0c5">KOMUTA KATMANI</text>
+  </g>
+  <text x="62" y="262" font-family="Arial, sans-serif" font-size="17" fill="#9db4c6">Yapay zekâ ajanlarını yönet, hastaneyi ayakta tut, kararının sonucunu gör.</text>
+  <rect width="1200" height="300" fill="url(#scan)"/>
+  <rect width="1200" height="300" fill="url(#vig)"/>
+</svg>
