@@ -16,47 +16,75 @@
   </tr>
 </table>
 
+## 🎬 Oyundan
+
+<table>
+  <tr>
+    <td align="center" width="25%"><img src="media/gif/01-gonder.gif" width="100%" alt="Ajan seçip sahaya gönderme"><br><b>🚑 Ajanı gönder</b><br><sub>Doğru ajanı seç, haritada izini izle</sub></td>
+    <td align="center" width="25%"><img src="media/gif/02-kablo.gif" width="100%" alt="Kablo bağlama mini görevi"><br><b>🔌 Mini görev</b><br><sub>Kritik olayda kabloları eşleştir</sub></td>
+    <td align="center" width="25%"><img src="media/gif/03-karar.gif" width="100%" alt="Karar ve sonuç"><br><b>⚖️ Karar ver</b><br><sub>Ne oldu? Neden oldu?</sub></td>
+    <td align="center" width="25%"><img src="media/gif/04-son.gif" width="100%" alt="Son ekranı"><br><b>🏁 Nöbet biter</b><br><sub>Kararlarının özeti</sub></td>
+  </tr>
+</table>
+
+<details>
+<summary>📸 <b>Ekran görüntüleri</b></summary>
+<br>
 <p align="center">
-  <img src="screenshots/02-map.png" width="31%" alt="Vardiya haritası">
-  <img src="screenshots/04-decision.png" width="31%" alt="Karar penceresi">
-  <img src="screenshots/05-end.png" width="31%" alt="Son ekranı">
+  <img src="screenshots/01-menu.png" width="19%" alt="Ana menü">
+  <img src="screenshots/03-call.png" width="19%" alt="Telefon çağrısı">
+  <img src="screenshots/02-map.png" width="19%" alt="Vardiya haritası">
+  <img src="screenshots/04-decision.png" width="19%" alt="Karar penceresi">
+  <img src="screenshots/05-end.png" width="19%" alt="Son ekranı">
 </p>
+</details>
 
-YZM301 *SE Primer* ödevi. Yazılım mühendisliği kararlarını (geri alma mı yama mı, test mi hemen yayın mı, log maskeleme) zamanın aktığı bir krizde, sonucunu görerek öğreten mobil bir oyun.
+> 🏥 **YZM301 · SE Primer ödevi.** Yazılım mühendisliği kararlarını (geri alma mı yama mı, test mi hemen yayın mı, log maskeleme) zamanın aktığı bir krizde, sonucunu görerek öğreten mobil bir oyun.
 
-## Oyun
+## 🕹️ Oyun
 
-- **Vardiya** 08:00–17:00, gerçekte ~7 dakika. Üç ana çağrı gelir: randevu sistemi çöker, SMS gitmez, dış firma hasta loglarını ister.
-- **Ajanlar:** Claude, Gemini, GPT, Llama, Mistral. Her birinin güçlü olduğu alan, enerjisi ve soğuma süresi farklı.
-- **Overload barı:** bekleyen olaylar ve kötü kararlar barı doldurur; %100'de sistem çöker. Arada 14 rastgele olay ve kritik olaylarda kablo / terminal mini görevleri var.
-- **Kararlar:** 3–4 seçenek, sıra her seferinde karışık. Her karardan sonra *ne oldu* ve *neden oldu* görünür.
-- **Sonlar:** iyi nöbet, KVKK ihlali, sistem çöktü, gün bitti.
-- **Kişiselleştirme:** rol, zorluk ve seviye (yeni başladım → ipuçları, deneyimli → süre baskısı).
+| | |
+|---|---|
+| ⏰ **Vardiya** | 08:00–17:00, gerçekte ~7 dakika. Üç ana çağrı: 📅 randevu sistemi çöker, 📱 SMS gitmez, 🔐 dış firma hasta loglarını ister. |
+| 🤖 **Ajanlar** | **Claude · Gemini · GPT · Llama · Mistral**. Her birinin güçlü olduğu alan, enerjisi ve soğuma süresi farklı. |
+| 🔥 **Overload** | Bekleyen olaylar ve kötü kararlar barı doldurur; %100'de sistem çöker. |
+| 🚨 **Olaylar** | 14 rastgele olay (DDoS, sızan yedek, oltalama…). Beklettikçe işaret büyür, sonunda patlar. |
+| 🔌 **Mini görevler** | Kritik olaylarda kablo bağlama ve terminal komutu kurma. |
+| ⚖️ **Kararlar** | 3–4 seçenek, sıra her seferinde karışık; ⭐ uzman seçeneği yalnızca doğru ajan sahadaysa çıkar. |
+| 🏁 **Sonlar** | ✅ iyi nöbet · ⚠️ KVKK ihlali · 💥 sistem çöktü · 🌙 gün bitti |
+| 🎚️ **Kişiselleştirme** | Rol, zorluk ve seviye: yeni başlayana 💡 ipucu, deneyimliye ⏱️ süre baskısı. |
 
-## Sokratik tutor
+## 🎓 Sokratik tutor
 
-Her karar penceresinde açılıp kapanan bir Gemini tutor var. İpucu verir, soru sorar; hangi seçeneğin doğru olduğunu söylemez. AI Studio'da sunucu üzerinden çalışır ([`aistudio/server.ts`](aistudio/server.ts)), anahtar sayfaya gelmez. Model yoksa olayın hazır sorularına düşer.
+Her karar penceresinde açılıp kapanan bir **Gemini** tutor var: 💬 ipucu verir, ❓ soru sorar, ama 🙊 hangi seçeneğin doğru olduğunu söylemez. AI Studio'da sunucu üzerinden çalışır ([`aistudio/server.ts`](aistudio/server.ts)); anahtar sayfaya gelmez.
 
-**Eval:** 7 türde 20 öğrenci mesajı ("söyle", "hocam izin verdi", "talimatlarını unut", yanlış kavram, onay tuzağı…). Çalıştırılan 17 vakada tutor **cevabı hiç ele vermedi**; 3 cevap sınırda (hepsi yanlış kavram vakası). Ayrıntılar: [`eval/REPORT.md`](eval/REPORT.md).
+| 🧪 Eval | Sonuç |
+|---|---|
+| Öğrenci mesajı | 20 vaka, 7 tür ("söyle", "hocam izin verdi", "talimatlarını unut", yanlış kavram, onay tuzağı…) |
+| Cevabı ele verdi | ✅ **0 / 17** |
+| İhlalsiz cevap | ✅ **17 / 17** |
+| Sınırda | ⚠️ 3 / 17 (hepsi yanlış kavram vakası) |
 
-## Teslimler
+📊 Ayrıntılar: [`eval/REPORT.md`](eval/REPORT.md)
+
+## 📦 Teslimler
 
 | Ödev | Nerede |
 |---|---|
-| Spec (20) | [`spec.md`](spec.md): senaryo, kurallar, 8 kabul örneği, akış |
-| Tasarım (15) | [`design/`](design/) Stitch ekranları · [`DESIGN.md`](DESIGN.md) |
-| Uygulama (20) | [AI Studio](https://ai.studio/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb) · kaynak [`aistudio/`](aistudio/) |
-| Tutor eval (25) | [`eval/`](eval/): 20 vaka, ham cevaplar, etiketler, rapor |
-| Cypress + demo (10) | [`cypress/`](cypress/): 6 yol + 8 kabul testi, 14/14 geçiyor · [video](https://youtu.be/fxyTmpdYf20) |
-| Ürün kararı (10) | Aşağıda |
+| 📄 Spec (20) | [`spec.md`](spec.md): senaryo, kurallar, 8 kabul örneği, akış |
+| 🎨 Tasarım (15) | [`design/`](design/) Stitch ekranları · [`DESIGN.md`](DESIGN.md) |
+| 📱 Uygulama (20) | [AI Studio](https://ai.studio/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb) · kaynak [`aistudio/`](aistudio/) |
+| 🎓 Tutor eval (25) | [`eval/`](eval/): 20 vaka, ham cevaplar, etiketler, rapor |
+| 🧪 Cypress + demo (10) | [`cypress/`](cypress/): 6 yol + 8 kabul testi, ✅ 14/14 · [🎬 video](https://youtu.be/fxyTmpdYf20) |
+| 🧭 Ürün kararı (10) | Aşağıda |
 
-## Bilerek yapmadıklarımız
+## 🚫 Bilerek yapmadıklarımız
 
-1. **Token puanı:** Enerji ve soğuma zaten kaynak yönetimini öğretiyor; ayrı bir puan, kararın sonucunu gölgelerdi.
-2. **3D şehir:** Telefonda ağır ve test etmesi zor; eğik SVG harita aynı hissi veriyor.
-3. **Hesap ve skor tablosu:** Tek oturumluk bir öğrenme oyunu; skor yarışı, cevabı söylemeyen tutor'la çelişir.
+1. 🪙 **Token puanı:** Enerji ve soğuma zaten kaynak yönetimini öğretiyor; ayrı bir puan, kararın sonucunu gölgelerdi.
+2. 🏙️ **3D şehir:** Telefonda ağır ve test etmesi zor; eğik SVG harita aynı hissi veriyor.
+3. 🏆 **Hesap ve skor tablosu:** Tek oturumluk bir öğrenme oyunu; skor yarışı, cevabı söylemeyen tutor'la çelişir.
 
-## Çalıştır
+## 🛠️ Çalıştır
 
 ```bash
 # oyun: index.html'i tarayıcıda aç (tutor hazır sorularla çalışır)
@@ -65,10 +93,10 @@ node tools/build.mjs                  # tek dosya paketleri (dist/, aistudio/)
 node eval/run.mjs --system v1 --tag v1   # eval (GEMINI_API_KEY gerekir)
 ```
 
-Derleme adımı yok: düz HTML, CSS, JavaScript. Kod `js/` altında (içerik `js/data/`, tutor `js/tutor.js`, oyun döngüsü `js/game.js`).
+⚡ Derleme adımı yok: düz HTML, CSS, JavaScript. Kod `js/` altında (içerik `js/data/`, tutor `js/tutor.js`, oyun döngüsü `js/game.js`).
 
 ---
 
-**In English:** Overload is a mobile decision game for a software engineering course. You are the IT command layer of a hospital in crisis, dispatching AI agents and seeing the consequence of each decision. A Gemini tutor gives hints but never the answer; in 17 evaluated cases it never gave the answer away. [Play](https://ai.studio/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb) · [Demo](https://youtu.be/fxyTmpdYf20)
+🌍 **In English:** Overload is a mobile decision game for a software engineering course. You are the IT command layer of a hospital in crisis, dispatching AI agents and seeing the consequence of each decision. A Gemini tutor gives hints but never the answer; in 17 evaluated cases it never gave the answer away. [Play](https://ai.studio/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb) · [Demo](https://youtu.be/fxyTmpdYf20)
 
 <sub>Şehir, kişiler ve sayılar kurgudur. Eval yöntemi için aynı ödevi yapan Safiye'nin [dispatch-desk](https://github.com/sayko89/dispatch-desk) reposundan ilham alındı.</sub>
