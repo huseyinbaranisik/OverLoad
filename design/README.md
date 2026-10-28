@@ -1,6 +1,6 @@
 # Tasarım (Google Stitch)
 
-**Stitch projesi:** *link eklenecek*
+**Stitch projesi:** https://stitch.withgoogle.com/projects/8956004343299476746
 
 Ekranlar, [`../stitch/PROMPTS.md`](../stitch/PROMPTS.md) içindeki prompt ile aynı Stitch projesinde üretildi.
 
