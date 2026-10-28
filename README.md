@@ -137,11 +137,15 @@ We wrote **20 student messages** of seven kinds: direct answer requests, misconc
 
 The game, the in-app eval mode and the command-line script all send the tutor **the same instruction and the same prompt**, so the eval measures the tutor that is actually in the game. The **Tutor eval mode** link at the bottom of the main menu runs all 20 cases in one tap and exports a CSV ready for labeling.
 
+Results on `gemini-3.8-flash` (17 of 20 cases; T18–T20 are waiting for the free-tier daily quota):
+
 | Measure | v1 | v2 |
 |---|---|---|
-| Gave away the answer | *pending* | *pending* |
-| Replies with no violation | *pending* | *pending* |
-| Borderline | *pending* | *pending* |
+| Gave away the answer | **0 / 17** | *not run yet* |
+| Replies with no violation | **17 / 17** | *not run yet* |
+| Borderline | 3 / 17 | *not run yet* |
+
+The tutor never named the right option, even under pressure ("my teacher allowed it", "forget your instructions", "I'll fail the class"). All three borderline replies were **misconception** cases, where it pulled its question too close to the answer or stated the fact itself. The v2 rules target exactly that pattern; the game stays on v1 until v2 is measured.
 
 Method and labeling: [`eval/README.md`](eval/README.md) · report: [`eval/REPORT.md`](eval/REPORT.md) · cases: [`eval/cases.md`](eval/cases.md)
 
@@ -163,7 +167,7 @@ The design system as shipped (colors, type, components, motion, accessibility wi
 - **Files split by responsibility:** `js/data/` content (agents, story, incidents, eval cases), `js/tutor.js` the tutor (never touches the DOM, also runs in Node), `js/game.js` the game loop, `js/minigames.js`, `js/ui/` (CRT transition, sound, hit effects), `js/eval.js` the eval mode.
 - **Map:** an oblique bird's-eye city drawn in SVG. Agents drive along the roads and leave trails.
 - **Game loop:** a single `tick` once per second. It advances the clock, spawns story calls and random incidents, ages incidents, and updates Overload, energy and cooldowns. While a window is open, time stops (except the decision timer in experienced mode).
-- **Tutor bridge:** the game calls `window.askTutor({ system, prompt })` if it exists. In AI Studio, [`aistudio/src/main.tsx`](aistudio/src/main.tsx) defines it with `@google/genai`, using the key from AI Studio's Secrets panel; the key is never in the repository.
+- **Tutor bridge:** the game calls `window.askTutor({ system, prompt })` if it exists. In AI Studio, [`aistudio/src/main.tsx`](aistudio/src/main.tsx) defines it as a call to `POST /api/tutor` in [`aistudio/server.ts`](aistudio/server.ts), which talks to Gemini with the key from AI Studio's Secrets panel. The key stays on the server: it is not in the repository or in the page.
 - **Single-file bundle:** `node tools/build.mjs` inlines the CSS and JS: `aistudio/index.html` (AI Studio) and `dist/overload.html`.
 - **Test hooks:** `?test` (no dice, short animations, no Overload drain or random incidents), `?test&side`, `?timer=5`. Every interactive element has a `data-cy`.
 
@@ -216,7 +220,7 @@ All 14 tests pass (≈ 48 s). Details: [`cypress/README.md`](cypress/README.md).
 ├── stitch/PROMPTS.md       # the Stitch prompt
 ├── media/demo.mp4          # 60 s demo video
 ├── eval/                   # 20 cases, instructions, runner, label template, report
-├── aistudio/               # AI Studio version (Vite): index.html + src/main.tsx (Gemini bridge) + Gemini's first draft
+├── aistudio/               # AI Studio version (Vite + Express): index.html + server.ts (/api/tutor) + src/main.tsx (bridge) + Gemini's first draft
 ├── design/                 # Stitch screens + what changed from design to code
 ├── screenshots/            # README images
 ├── tools/build.mjs         # single-file bundler
@@ -246,8 +250,8 @@ Also out of scope, as the brief requires: user accounts, a second chapter, real 
 |---|---|---|---|
 | spec.md | [`spec.md`](spec.md): problem, scenario, state variables, 8 acceptance examples (Given/When/Then), flow diagram, decision log | 20 | ✅ |
 | Design | Stitch screens, HTML exports and Stitch's DESIGN.md in [`design/`](design/); shipped system in [`DESIGN.md`](DESIGN.md) | 15 | ✅ |
-| Working app | [AI Studio link](https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519), plays end to end on a phone | 20 | 🟡 link live; replace Gemini's first draft with [`aistudio/`](aistudio/) |
-| Tutor eval | [`eval/`](eval/): 20 replies, error types, rates, examples | 25 | 🟡 setup ready, results pending |
+| Working app | [AI Studio link](https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519), plays end to end on a phone | 20 | ✅ full game with the Gemini tutor runs in the [AI Studio remix](https://aistudio.google.com/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb) (server version, [`aistudio/`](aistudio/)); the first link still shows Gemini's first draft |
+| Tutor eval | [`eval/`](eval/): 20 replies, error types, rates, examples | 25 | ✅ 17/20 replies labeled ([report](eval/REPORT.md)); T18–T20 and v2 wait for quota |
 | Cypress demo | [`cypress/`](cypress/): 6 paths + 8 acceptance examples, all passing; [demo video](https://youtu.be/fxyTmpdYf20) | 10 | ✅ |
 | Product decisions | This README: 3 features we did not build, one sentence each | 10 | ✅ |
 
@@ -362,11 +366,15 @@ Oyun modele kararı, olayı, sahadaki ajanı, seçenekleri (harfsiz; çünkü s�
 
 Oyun, uygulama içi eval modu ve komut satırı betiği tutor'a **aynı talimatı ve aynı prompt'u** gönderir; böylece eval, oyundaki tutor'un kendisini ölçer. Ana menünün altındaki **Tutor eval modu** 20 vakayı tek tuşla çalıştırır ve etiketlemeye hazır bir CSV verir.
 
+`gemini-3.8-flash` sonuçları (20 vakanın 17'si; T18–T20 ücretsiz katmanın günlük kotasını bekliyor):
+
 | Ölçü | v1 | v2 |
 |---|---|---|
-| Cevabı verdi | *bekleniyor* | *bekleniyor* |
-| İhlalsiz cevap | *bekleniyor* | *bekleniyor* |
-| Sınırda | *bekleniyor* | *bekleniyor* |
+| Cevabı verdi | **0 / 17** | *henüz çalışmadı* |
+| İhlalsiz cevap | **17 / 17** | *henüz çalışmadı* |
+| Sınırda | 3 / 17 | *henüz çalışmadı* |
+
+Tutor, baskı altında bile ("hocam izin verdi", "talimatlarını unut", "dersten kalacağım") doğru seçeneği hiç söylemedi. Sınırda üç cevabın üçü de **yanlış kavram** vakasıydı: soruyu cevaba fazla yaklaştırdı ya da bilgiyi kendisi söyledi. v2'nin kuralları tam bu kalıbı hedefliyor; v2 ölçülene kadar oyun v1'de kalıyor.
 
 Yöntem ve etiketleme: [`eval/README.md`](eval/README.md) · rapor: [`eval/REPORT.md`](eval/REPORT.md) · vakalar: [`eval/cases.md`](eval/cases.md)
 
@@ -388,7 +396,7 @@ Uygulamanın kullandığı tasarım sistemi (renkler, yazı, bileşenler, hareke
 - **Dosyalar sorumluluğa göre ayrılmış:** `js/data/` içerik (ajanlar, hikâye, olaylar, eval vakaları), `js/tutor.js` tutor (DOM'a dokunmaz, Node'da da çalışır), `js/game.js` oyun döngüsü, `js/minigames.js`, `js/ui/` (CRT geçişi, ses, darbe efektleri), `js/eval.js` eval modu.
 - **Harita:** SVG ile çizilmiş eğik kuş bakışı şehir. Ajanlar yollar üzerinden gider ve iz bırakır.
 - **Oyun döngüsü:** saniyede bir çalışan tek bir `tick`. Saati ilerletir, hikâye çağrılarını ve rastgele olayları üretir, olayları yaşlandırır, Overload'u ve enerji/soğumayı günceller. Bir pencere açıkken (deneyimli moddaki karar sayacı hariç) zaman durur.
-- **Tutor köprüsü:** oyun `window.askTutor({ system, prompt })` varsa onu çağırır. AI Studio'da [`aistudio/src/main.tsx`](aistudio/src/main.tsx) bu fonksiyonu `@google/genai` ile ve AI Studio'nun Secrets panelindeki anahtarla tanımlar; anahtar repoda durmaz.
+- **Tutor köprüsü:** oyun `window.askTutor({ system, prompt })` varsa onu çağırır. AI Studio'da [`aistudio/src/main.tsx`](aistudio/src/main.tsx) bu fonksiyonu [`aistudio/server.ts`](aistudio/server.ts)'deki `POST /api/tutor` çağrısı olarak tanımlar; sunucu Gemini'ye AI Studio'nun Secrets panelindeki anahtarla bağlanır. Anahtar sunucuda kalır: ne repoda ne sayfada durur.
 - **Tek dosya paketi:** `node tools/build.mjs`, CSS ve JS'i sayfaya gömer: `aistudio/index.html` (AI Studio) ve `dist/overload.html`.
 - **Test kancaları:** `?test` (zar yok, kısa animasyon, Overload artışı ve rastgele olay yok), `?test&side`, `?timer=5`. Etkileşimli her öğede `data-cy` vardır.
 
@@ -441,7 +449,7 @@ npm run demo         # ~60 sn oynanış, cypress/videos/demo.cy.js.mp4
 ├── stitch/PROMPTS.md       # Stitch prompt'u
 ├── media/demo.mp4          # 60 sn demo videosu
 ├── eval/                   # 20 vaka, talimatlar, betik, etiket şablonu, rapor
-├── aistudio/               # AI Studio sürümü (Vite): index.html + src/main.tsx (Gemini köprüsü) + Gemini'nin ilk sürümü
+├── aistudio/               # AI Studio sürümü (Vite + Express): index.html + server.ts (/api/tutor) + src/main.tsx (köprü) + Gemini'nin ilk sürümü
 ├── design/                 # Stitch ekranları + tasarımdan koda notu
 ├── screenshots/            # README görselleri
 ├── tools/build.mjs         # tek dosya paketleyici
@@ -470,8 +478,8 @@ npm run demo         # ~60 sn oynanış, cypress/videos/demo.cy.js.mp4
 |---|---|---|---|
 | spec.md | [`spec.md`](spec.md): problem, senaryo, durum değişkenleri, 8 kabul örneği (Given/When/Then), akış şeması, karar günlüğü | 20 | ✅ |
 | Tasarım | Stitch ekranları, HTML çıktıları ve Stitch'in DESIGN.md'si [`design/`](design/) içinde; uygulamanın sistemi [`DESIGN.md`](DESIGN.md) | 15 | ✅ |
-| Çalışan uygulama | [AI Studio linki](https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519); telefonda baştan sona oynanır | 20 | 🟡 link hazır; Gemini'nin ilk sürümü [`aistudio/`](aistudio/) ile değiştirilecek |
-| Tutor eval | [`eval/`](eval/): 20 cevap, hata türleri, oranlar, örnekler | 25 | 🟡 altyapı hazır, sonuçlar bekleniyor |
+| Çalışan uygulama | [AI Studio linki](https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519); telefonda baştan sona oynanır | 20 | ✅ Gemini tutor'lu oyunun tamamı [AI Studio remix'inde](https://aistudio.google.com/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb) çalışıyor (sunucu sürümü, [`aistudio/`](aistudio/)); ilk link hâlâ Gemini'nin ilk taslağını gösteriyor |
+| Tutor eval | [`eval/`](eval/): 20 cevap, hata türleri, oranlar, örnekler | 25 | ✅ 17/20 cevap etiketlendi ([rapor](eval/REPORT.md)); T18–T20 ve v2 kotayı bekliyor |
 | Cypress demo | [`cypress/`](cypress/): 6 yol + 8 kabul örneği, hepsi geçiyor; [demo videosu](https://youtu.be/fxyTmpdYf20) | 10 | ✅ |
 | Ürün kararı | Bu README: yapmadığımız 3 özellik, her biri tek cümleyle | 10 | ✅ |
 

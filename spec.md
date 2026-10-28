@@ -265,7 +265,7 @@ stateDiagram-v2
   - Sonuç: `what`, `why`, `odds`, `result-continue`
   - Son: `end-title` (`data-end`: `good` / `kvkk` / `overload` / `time`), `restart`
   - Eval: `eval-status`, `eval-version`, `eval-system`, `eval-run`, `eval-progress`, `eval-list`, `eval-T01` … `eval-T20`, `eval-download`, `eval-copy`, `eval-back`
-- **Tutor köprüsü:** oyun `window.askTutor({ system, prompt })` varsa onu çağırır (AI Studio'da `aistudio/src/main.tsx` tanımlar; anahtar AI Studio'nun Secrets panelinden gelir).
+- **Tutor köprüsü:** oyun `window.askTutor({ system, prompt })` varsa onu çağırır (AI Studio'da `aistudio/src/main.tsx` bunu `aistudio/server.ts`'deki `POST /api/tutor` çağrısı olarak tanımlar; anahtar sunucuda, AI Studio'nun Secrets panelinden gelir).
 - **Cypress:** `npm run test:e2e` (yollar + kabul örnekleri), `npm run demo` (60 sn video).
 
 ---
