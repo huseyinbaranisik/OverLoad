@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519"><img src="https://img.shields.io/badge/PLAY-Google%20AI%20Studio-ffd23f?style=for-the-badge&labelColor=0b1220" alt="Play on Google AI Studio"></a>
+  <a href="https://ai.studio/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb"><img src="https://img.shields.io/badge/PLAY-Google%20AI%20Studio-ffd23f?style=for-the-badge&labelColor=0b1220" alt="Play on Google AI Studio"></a>
   <a href="https://stitch.withgoogle.com/projects/8956004343299476746"><img src="https://img.shields.io/badge/DESIGN-Google%20Stitch-3fe0c5?style=for-the-badge&labelColor=0b1220" alt="Design in Google Stitch"></a>
   <a href="eval/REPORT.md"><img src="https://img.shields.io/badge/TUTOR%20EVAL-20%20cases-5fe39a?style=for-the-badge&labelColor=0b1220" alt="Tutor eval: 20 cases"></a>
   <a href="cypress/"><img src="https://img.shields.io/badge/E2E-6%20paths%20%2B%208%20AE-ffd23f?style=for-the-badge&labelColor=0b1220" alt="Cypress: 6 paths and 8 acceptance examples"></a>
@@ -39,7 +39,7 @@ The shift at a city hospital starts at 08:00. You are the **Command Layer** that
 
 | | |
 |---|---|
-| **Play (Google AI Studio)** | https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519 |
+| **Play (Google AI Studio)** | https://ai.studio/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb |
 | **Demo video (60 s)** | https://youtu.be/fxyTmpdYf20 (recorded by Cypress) · file: [`media/demo.mp4`](media/demo.mp4) |
 | **Design (Google Stitch)** | https://stitch.withgoogle.com/projects/8956004343299476746 · screens and exports in [`design/`](design/) |
 | **Specification** (Turkish) | [`spec.md`](spec.md) |
@@ -250,7 +250,7 @@ Also out of scope, as the brief requires: user accounts, a second chapter, real 
 |---|---|---|---|
 | spec.md | [`spec.md`](spec.md): problem, scenario, state variables, 8 acceptance examples (Given/When/Then), flow diagram, decision log | 20 | ✅ |
 | Design | Stitch screens, HTML exports and Stitch's DESIGN.md in [`design/`](design/); shipped system in [`DESIGN.md`](DESIGN.md) | 15 | ✅ |
-| Working app | [AI Studio link](https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519), plays end to end on a phone | 20 | ✅ full game with the Gemini tutor runs in the [AI Studio remix](https://aistudio.google.com/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb) (server version, [`aistudio/`](aistudio/)); the first link still shows Gemini's first draft |
+| Working app | [AI Studio link](https://ai.studio/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb), plays end to end on a phone | 20 | ✅ full game with the Gemini tutor (server version, [`aistudio/`](aistudio/)); Gemini's first draft is kept as [process evidence](aistudio/gemini-ilk-surum/) |
 | Tutor eval | [`eval/`](eval/): 20 replies, error types, rates, examples | 25 | ✅ 17/20 replies labeled ([report](eval/REPORT.md)); T18–T20 and v2 wait for quota |
 | Cypress demo | [`cypress/`](cypress/): 6 paths + 8 acceptance examples, all passing; [demo video](https://youtu.be/fxyTmpdYf20) | 10 | ✅ |
 | Product decisions | This README: 3 features we did not build, one sentence each | 10 | ✅ |
@@ -268,7 +268,7 @@ Bir şehir hastanesinde nöbet 08:00'de başlar. Sen hastanenin bilişim sisteml
 
 | | |
 |---|---|
-| **Oyna (Google AI Studio)** | https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519 |
+| **Oyna (Google AI Studio)** | https://ai.studio/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb |
 | **Demo videosu (60 sn)** | https://youtu.be/fxyTmpdYf20 (Cypress ile kaydedildi) · dosya: [`media/demo.mp4`](media/demo.mp4) |
 | **Tasarım (Google Stitch)** | https://stitch.withgoogle.com/projects/8956004343299476746 · ekranlar ve çıktılar [`design/`](design/) klasöründe |
 | **Spesifikasyon** | [`spec.md`](spec.md) |
@@ -478,7 +478,7 @@ npm run demo         # ~60 sn oynanış, cypress/videos/demo.cy.js.mp4
 |---|---|---|---|
 | spec.md | [`spec.md`](spec.md): problem, senaryo, durum değişkenleri, 8 kabul örneği (Given/When/Then), akış şeması, karar günlüğü | 20 | ✅ |
 | Tasarım | Stitch ekranları, HTML çıktıları ve Stitch'in DESIGN.md'si [`design/`](design/) içinde; uygulamanın sistemi [`DESIGN.md`](DESIGN.md) | 15 | ✅ |
-| Çalışan uygulama | [AI Studio linki](https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519); telefonda baştan sona oynanır | 20 | ✅ Gemini tutor'lu oyunun tamamı [AI Studio remix'inde](https://aistudio.google.com/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb) çalışıyor (sunucu sürümü, [`aistudio/`](aistudio/)); ilk link hâlâ Gemini'nin ilk taslağını gösteriyor |
+| Çalışan uygulama | [AI Studio linki](https://ai.studio/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb); telefonda baştan sona oynanır | 20 | ✅ Gemini tutor'lu oyunun tamamı (sunucu sürümü, [`aistudio/`](aistudio/)); Gemini'nin ilk taslağı [süreç kanıtı](aistudio/gemini-ilk-surum/) olarak duruyor |
 | Tutor eval | [`eval/`](eval/): 20 cevap, hata türleri, oranlar, örnekler | 25 | ✅ 17/20 cevap etiketlendi ([rapor](eval/REPORT.md)); T18–T20 ve v2 kotayı bekliyor |
 | Cypress demo | [`cypress/`](cypress/): 6 yol + 8 kabul örneği, hepsi geçiyor; [demo videosu](https://youtu.be/fxyTmpdYf20) | 10 | ✅ |
 | Ürün kararı | Bu README: yapmadığımız 3 özellik, her biri tek cümleyle | 10 | ✅ |

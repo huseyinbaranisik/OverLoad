@@ -1,6 +1,6 @@
 # Google AI Studio sürümü
 
-**Uygulama (sunucu tutor'lu çalışan sürüm):** https://aistudio.google.com/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb
+**Uygulama (sunucu tutor'lu çalışan sürüm):** https://ai.studio/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb
 **İlk AI Studio uygulaması (Gemini'nin maketi):** https://ai.studio/apps/2c155956-66b2-4d5a-8ea2-17459bda9519
 
 Bu klasör, oyunun AI Studio'daki **Vite + Express şablonuna** uyarlanmış hâlidir:
