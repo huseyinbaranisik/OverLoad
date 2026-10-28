@@ -6,7 +6,15 @@
 
 > Hastane çöküyor, telefon susmuyor. Sen hastanenin bilişim sistemlerini yöneten **Komuta Katmanı**sın: sahaya yapay zekâ ajanları gönder, kararı ver, sonucunu hemen gör.
 
-**[▶ Oyna](https://ai.studio/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb)** · **[Demo (60 sn)](https://youtu.be/fxyTmpdYf20)** · **[Stitch tasarımı](https://stitch.withgoogle.com/projects/8956004343299476746)** · [Spec](spec.md) · [Tutor eval](eval/REPORT.md)
+<table align="center">
+  <tr>
+    <td align="center" width="20%">🎮<br><b><a href="https://ai.studio/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb">Oyna</a></b><br><sub>Google AI Studio</sub></td>
+    <td align="center" width="20%">▶️<br><b><a href="https://youtu.be/fxyTmpdYf20">Demo</a></b><br><sub>60 sn · YouTube</sub></td>
+    <td align="center" width="20%">🎨<br><b><a href="https://stitch.withgoogle.com/projects/8956004343299476746">Tasarım</a></b><br><sub>Google Stitch</sub></td>
+    <td align="center" width="20%">📄<br><b><a href="spec.md">Spec</a></b><br><sub>8 kabul örneği</sub></td>
+    <td align="center" width="20%">🎓<br><b><a href="eval/REPORT.md">Tutor eval</a></b><br><sub>20 vaka · rapor</sub></td>
+  </tr>
+</table>
 
 <p align="center">
   <img src="screenshots/02-map.png" width="31%" alt="Vardiya haritası">
