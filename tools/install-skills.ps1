@@ -2,7 +2,7 @@
 #
 #   irm https://raw.githubusercontent.com/huseyinbaranisik/OverLoad/main/tools/install-skills.ps1 | iex
 #
-# Gerekenler: claude (Claude Code CLI), git, node/npx. gstack için bun + Git Bash, headroom ve ppt-master için python.
+# Eksikse Claude Code, Git, Node.js, Bun ve uv'yi kendisi kurar (winget ile). ppt-master'ın python paketleri için pip gerekir.
 # Biri başarısız olursa script durmaz, sonda hangilerinin kurulamadığını listeler.
 
 $ok = @(); $fail = @()
@@ -14,6 +14,22 @@ function Run($name, [scriptblock]$block) {
   if ($LASTEXITCODE -eq 0) { $script:ok += $name } else { $script:fail += $name }
 }
 
+# Yeni kurulan araçları bu pencerede de görebilmek için PATH'i yeniler.
+function Refresh-Path {
+  $env:Path = @(
+    $env:Path,
+    [Environment]::GetEnvironmentVariable('Path', 'Machine'),
+    [Environment]::GetEnvironmentVariable('Path', 'User'),
+    "$HOME\.local\bin", "$HOME\.bun\bin", "$env:ProgramFiles\Git\cmd", "$env:ProgramFiles\nodejs"
+  ) -join ';'
+}
+
+function Winget($id) {
+  if (-not (Have winget)) { Write-Host "winget yok, $id elle kurulmalı" -ForegroundColor Red; return }
+  winget install --id $id -e --source winget --accept-package-agreements --accept-source-agreements
+  Refresh-Path
+}
+
 # Claude Code plugin marketplace'i ekleyip plugini kullanıcı kapsamında kurar.
 function Plugin($name, $repo, $id) {
   Step "$name  ($repo)"
@@ -22,13 +38,22 @@ function Plugin($name, $repo, $id) {
 }
 
 # skills CLI (vercel-labs/skills) ile ~/.claude/skills altına global kurulum.
+# npx.ps1 betik engeline takılmasın diye npx.cmd çağrılır.
 function Skills($name, $repo, [string[]]$extra = @()) {
   Step "$name  ($repo)"
-  Run $name { npx -y skills@latest add $repo @extra -g -a claude-code -y }
+  Run $name { npx.cmd -y skills@latest add $repo @extra -g -a claude-code -y }
 }
 
-foreach ($c in 'claude', 'git', 'npx') {
-  if (-not (Have $c)) { Write-Host "Hata: '$c' bulunamadı. Önce onu kur." -ForegroundColor Red; return }
+# Eksik araçları kur: Claude Code, Git, Node.js, Bun, uv
+Refresh-Path
+if (-not (Have claude)) { Step "Claude Code kuruluyor"; powershell -NoProfile -ExecutionPolicy Bypass -c "irm https://claude.ai/install.ps1 | iex"; Refresh-Path }
+if (-not (Have git))    { Step "Git kuruluyor";         Winget Git.Git }
+if (-not (Have npx.cmd)) { Step "Node.js kuruluyor";    Winget OpenJS.NodeJS.LTS }
+if (-not (Have bun))    { Step "Bun kuruluyor";         powershell -NoProfile -ExecutionPolicy Bypass -c "irm bun.sh/install.ps1 | iex"; Refresh-Path }
+if (-not (Have uv))     { Step "uv kuruluyor";          Winget astral-sh.uv }
+
+foreach ($c in 'claude', 'git', 'npx.cmd') {
+  if (-not (Have $c)) { Write-Host "Hata: '$c' kurulamadı. Kurup bu komutu yeni bir pencerede tekrar çalıştır." -ForegroundColor Red; return }
 }
 
 # 1. satır: ponytail, karpathy, superpowers, ecc, Matt Pocock
@@ -45,14 +70,15 @@ Skills "agent skills (vercel)"     "vercel-labs/agent-skills" @('--skill', '*')
 # 2. satır: gstack, caveman, claude-mem, headroom, gsd, bmad
 Step "gstack  (garrytan/gstack)"
 $gstack = Join-Path $HOME ".claude/skills/gstack"
-if ((Have bun) -and (Have bash)) {
+$gitBash = "$env:ProgramFiles\Git\bin\bash.exe"   # PATH'teki bash WSL'inki olabilir
+if ((Have bun) -and (Test-Path $gitBash)) {
   if (Test-Path (Join-Path $gstack ".git")) {
-    Run "gstack" { git -C $gstack pull --ff-only; if ($LASTEXITCODE -eq 0) { Push-Location $gstack; bash ./setup; Pop-Location } }
+    Run "gstack" { git -C $gstack pull --ff-only; if ($LASTEXITCODE -eq 0) { Push-Location $gstack; & $gitBash ./setup; Pop-Location } }
   } else {
-    Run "gstack" { git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git $gstack; if ($LASTEXITCODE -eq 0) { Push-Location $gstack; bash ./setup; Pop-Location } }
+    Run "gstack" { git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git $gstack; if ($LASTEXITCODE -eq 0) { Push-Location $gstack; & $gitBash ./setup; Pop-Location } }
   }
 } else {
-  Write-Host "bun veya Git Bash yok, gstack atlandı (bun: powershell -c `"irm bun.sh/install.ps1 | iex`")"
+  Write-Host "bun veya Git Bash yok, gstack atlandı"
   $fail += "gstack (bun/bash yok)"
 }
 
@@ -66,7 +92,7 @@ else { Write-Host "uv/pip yok, headroom CLI atlandı"; $fail += "headroom CLI (p
 Plugin "headroom" "chopratejas/headroom" "headroom@headroom-marketplace"
 
 Step "gsd  (get-shit-done-cc)"
-Run "gsd" { npx -y get-shit-done-cc@latest --claude --global }
+Run "gsd" { npx.cmd -y get-shit-done-cc@latest --claude --global }
 
 Skills "bmad method" "bmad-code-org/BMAD-METHOD" @('--skill', '*')
 
