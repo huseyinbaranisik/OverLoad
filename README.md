@@ -67,6 +67,31 @@ Her karar penceresinde açılıp kapanan bir **Gemini** tutor var: 💬 ipucu ve
 
 📊 Ayrıntılar: [`eval/REPORT.md`](eval/REPORT.md)
 
+## 🧠 v2 · Uyum modeli (The Primer v2)
+
+Karar penceresi açılırken küçük bir model, oyuncunun **cazip ama kötü seçeneğe kayma olasılığını** tahmin eder ve oyun buna göre değişir:
+
+| Model ne der? | Oyunda ne olur? |
+|---|---|
+| 🟡 **Destek** (p ≥ 0,5) | Tutor açık gelir ve ilk Sokratik soruyu kendisi sorar; deneyimli moddaki ⏱️ süre sayacı kalkar. |
+| 🟢 **Akış** (p < 0,5) | Tutor kapalı, sayaç seviyeye göre kalır. |
+
+Girdiler oyuncunun o vardiyadaki davranışı: tereddüt (ortalama karar süresi), önceki kötü seçimler, işe uygun olmayan ajan gönderme, Overload, tutor'a soru sayısı, seviye ve kaçıncı karar olduğu.
+
+| | |
+|---|---|
+| 📄 Spec | [`spec.md` §12](spec.md): görev, eşik (AUC ≥ 0,75), AE-9/10/11. Eğitimden **önce** commit'lendi (`fb07e3c`). |
+| 🗃️ Veri | [`data/oturumlar.csv`](data/oturumlar.csv): 400 oturum, 2183 karar · [`data/SOZLUK.md`](data/SOZLUK.md) |
+| 🏋️ Eğitim | [`train.py`](train.py): tek komut, tohum 13, eşik altında hata verip durur |
+| 📦 Artefakt | [`model/`](model/): `model.onnx` (573 bayt) · `config.json` (sözleşme) · [model kartı](model/README.md) |
+| 🚀 Yayın | [Hugging Face](https://huggingface.co/huseyinbaran/overload-uyum) · [`RELEASE.md`](RELEASE.md): commit'e sabit URL, rollback, gölge/kanarya, ödünleşim matrisi |
+| 🧪 Test | [`tests/parite.py`](tests/parite.py) (Python kahini) · [`cypress/e2e/model.cy.js`](cypress/e2e/model.cy.js): tarayıcı ↔ Python fark < 1e-4, AE-9/10 · eski 14 test ✅ |
+| 📝 Sınav | [`SINAV_TASARIMI.md`](SINAV_TASARIMI.md) |
+
+**Sonuç:** test AUC **0,892**, doğruluk 0,832, ONNX ↔ sklearn farkı 1,2e-7, tarayıcı ↔ Python farkı 4e-9.
+
+> ⚠️ **Veri sentetiktir** (`kaynak = sentetik`, gerçek oyuncu yok). Üretici: [`data/uret.py`](data/uret.py), **tohum 13**. Her oturumun gizli bir beceri puanı vardır (seviyeye göre N(−0,6 / 0 / +0,6, 1)); kötü seçim olasılığı `σ(−1,3 − 0,9·beceri + 0,55·önceki_kötü + 0,35·uyumsuz_ajan + 0,02·(overload−30) + 0,04·(ort_karar_sn−20) − 0,3·min(tutor_soru,3))`. Ayrıntı: [`data/SOZLUK.md`](data/SOZLUK.md). Yüksek AUC bu yüzden iyimserdir; sınırlar [model kartında](model/README.md).
+
 ## 📦 Teslimler
 
 | Ödev | Nerede |
@@ -84,16 +109,22 @@ Her karar penceresinde açılıp kapanan bir **Gemini** tutor var: 💬 ipucu ve
 2. 🏙️ **3D şehir:** Telefonda ağır ve test etmesi zor; eğik SVG harita aynı hissi veriyor.
 3. 🏆 **Hesap ve skor tablosu:** Tek oturumluk bir öğrenme oyunu; skor yarışı, cevabı söylemeyen tutor'la çelişir.
 
-## 🛠️ Çalıştır
+## 🛠️ Kurulum
 
 ```bash
-# oyun: index.html'i tarayıcıda aç (tutor hazır sorularla çalışır)
-npm install && npm run test:e2e       # Cypress testleri
-node tools/build.mjs                  # tek dosya paketleri (dist/, aistudio/)
-node eval/run.mjs --system v1 --tag v1   # eval (GEMINI_API_KEY gerekir)
+uv venv --python 3.12 .venv && uv pip install --python .venv -r requirements.txt
+.venv/Scripts/python data/uret.py && .venv/Scripts/python train.py && .venv/Scripts/python tests/parite.py --kontrol
+npm install && npm run test:e2e
 ```
 
-⚡ Derleme adımı yok: düz HTML, CSS, JavaScript. Kod `js/` altında (içerik `js/data/`, tutor `js/tutor.js`, oyun döngüsü `js/game.js`).
+Oyun: `index.html`'i bir yerel sunucuyla aç (ör. `python -m http.server`); model `model/model.onnx`'ten yüklenir. Derleme adımı yok: düz HTML, CSS, JavaScript. macOS/Linux'ta `.venv/Scripts/` yerine `.venv/bin/`.
+
+## 🤖 Yapay zekâ araçları beyanı
+
+- **Claude Code (Opus):** spec §12 taslağı, sentetik veri üreteci, `train.py`, ONNX aktarımı, `js/uyum.js`, parite ve Cypress testleri, `RELEASE.md` ve `SINAV_TASARIMI.md` taslakları.
+- **Benim kararlarım:** hedef (kötü seçime kayma riski) ve oyuna etkisi (destek/akış), kabul eşiği, gerçek oyuncu yerine sentetik veriyle ilerleme (veri puanının yarısını bilerek bıraktım), sunucu yerine tarayıcıda çıkarım.
+- **Gemini (AI Studio):** oyunun AI Studio sürümü ve sunucu taraflı tutor köprüsü; Sokratik tutor'un kendisi.
+- **Elle düzelttiklerim:** _…(teslimden önce doldurulacak)_
 
 ---
 

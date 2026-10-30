@@ -1,0 +1,125 @@
+{
+  "model_version": "2.0.0",
+  "tolerance": 0.0001,
+  "feature_order": [
+    "seviye",
+    "karar_no",
+    "ort_karar_sn",
+    "onceki_kotu",
+    "uyumsuz_ajan",
+    "overload",
+    "tutor_soru"
+  ],
+  "cases": [
+    {
+      "name": "deneyimli, vardiya başı",
+      "features": {
+        "seviye": 2,
+        "karar_no": 1,
+        "ort_karar_sn": 0,
+        "onceki_kotu": 0,
+        "uyumsuz_ajan": 0,
+        "overload": 0,
+        "tutor_soru": 0
+      },
+      "x": [
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "p": 0.04782322
+    },
+    {
+      "name": "yeni, iki kötü seçim ve iki uyumsuz ajan",
+      "features": {
+        "seviye": 0,
+        "karar_no": 3,
+        "ort_karar_sn": 0.5,
+        "onceki_kotu": 2,
+        "uyumsuz_ajan": 2,
+        "overload": 50,
+        "tutor_soru": 0
+      },
+      "x": [
+        0,
+        3,
+        0.5,
+        2,
+        2,
+        50,
+        0
+      ],
+      "p": 0.67797363
+    },
+    {
+      "name": "orta, tereddütlü ama isabetli",
+      "features": {
+        "seviye": 1,
+        "karar_no": 4,
+        "ort_karar_sn": 32.5,
+        "onceki_kotu": 0,
+        "uyumsuz_ajan": 1,
+        "overload": 20,
+        "tutor_soru": 2
+      },
+      "x": [
+        1,
+        4,
+        32.5,
+        0,
+        1,
+        20,
+        2
+      ],
+      "p": 0.28292695
+    },
+    {
+      "name": "orta, bir kötü seçim ve iki uyumsuz ajan",
+      "features": {
+        "seviye": 1,
+        "karar_no": 3,
+        "ort_karar_sn": 24,
+        "onceki_kotu": 1,
+        "uyumsuz_ajan": 2,
+        "overload": 45,
+        "tutor_soru": 0
+      },
+      "x": [
+        1,
+        3,
+        24,
+        1,
+        2,
+        45,
+        0
+      ],
+      "p": 0.71509194
+    },
+    {
+      "name": "yeni, Overload tavanda",
+      "features": {
+        "seviye": 0,
+        "karar_no": 6,
+        "ort_karar_sn": 40,
+        "onceki_kotu": 4,
+        "uyumsuz_ajan": 5,
+        "overload": 100,
+        "tutor_soru": 1
+      },
+      "x": [
+        0,
+        6,
+        40,
+        4,
+        5,
+        100,
+        1
+      ],
+      "p": 0.9977603
+    }
+  ]
+}

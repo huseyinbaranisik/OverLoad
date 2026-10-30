@@ -68,6 +68,7 @@ const S = {
   level: 'orta', role: 'gelistirici', goal: 'ayakta', difficulty: 'normal', heat: 0, min: 480, solved: 0, kvkk: false, tutorUsed: 0,
   callIdx: 0, cleared: 0, boomed: 0, spawnIn: 8, bag: [], incidents: [], sel: null, agent: Object.fromEntries(AGENTS.map(a => [a.id, 'hazir'])),
   energy: Object.fromEntries(AGENTS.map(a => [a.id, 100])), cool: Object.fromEntries(AGENTS.map(a => [a.id, 0])), log: [], over: false, nid: 0,
+  kararSn: [], kotu: 0, uyumsuz: 0, // uyum modelinin girdileri (data/SOZLUK.md)
 };
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 const roll = ch => TEST ? ch >= 50 : Math.random() * 100 < ch;
@@ -301,7 +302,7 @@ function explode(inc) {
 
 function dispatch(a, inc) {
   S.energy[a.id] -= a.cost;
-  if (chance(a, inc.c.needs) < 75) { addHeat(5); toast(`${a.name} bu işe pek uygun değil: Overload +5`); } // yanlış ajan sistemi zorlar
+  if (chance(a, inc.c.needs) < 75) { S.uyumsuz++; addHeat(5); toast(`${a.name} bu işe pek uygun değil: Overload +5`); } // yanlış ajan sistemi zorlar
   sfx('dispatch');
   inc.state = 'enroute'; inc.agent = a.id; S.agent[a.id] = 'yolda'; S.sel = null; renderAll();
   travel(a, route('hastane', inc.building), () => {
@@ -341,7 +342,7 @@ function mountTutor(el, ctx) {
     if (who === 'tutor') b.dataset.cy = 'tutor-reply';
     convo.append(b); return b;
   };
-  btn.onclick = async () => {
+  btn.onclick = async auto => { // auto === true: destek modunun kendiliğinden sorduğu soru, oyuncunun sorusu sayılmaz
     const msg = input.value.trim();
     btn.disabled = true; input.value = '';
     if (msg) bubble('oyuncu', msg);
@@ -350,9 +351,17 @@ function mountTutor(el, ctx) {
     wait.remove(); bubble('tutor', r.text);
     ctx.history.push({ who: 'oyuncu', text: msg || '(boş)' }, { who: 'tutor', text: r.text });
     src.textContent = TUTOR_SOURCE[r.source]; src.dataset.source = r.source;
-    S.tutorUsed++; btn.disabled = false;
+    if (auto !== true) S.tutorUsed++;
+    btn.disabled = false;
   };
 }
+
+// Pencere açılırken modelin girdileri; sıra js/uyum.js → UYUM_OZELLIK
+const uyumGirdi = () => ({
+  seviye: { yeni: 0, orta: 1, deneyimli: 2 }[S.level], karar_no: S.kararSn.length + 1,
+  ort_karar_sn: S.kararSn.length ? S.kararSn.reduce((t, v) => t + v, 0) / S.kararSn.length : 0,
+  onceki_kotu: S.kotu, uyumsuz_ajan: S.uyumsuz, overload: Math.round(S.heat), tutor_soru: S.tutorUsed,
+});
 
 const TIMEOUT_OPT = { id: '-', label: '(süre doldu, karar verilmedi)', mod: -30,
   ok: 'Karar veremedin ama ajan kendi bildiğini yaptı ve sorun kapandı.',
@@ -365,17 +374,21 @@ function optButtons(list, a) {
 
 const decTitle = inc => inc.c.decision.title || `${inc.c.type.toUpperCase()} · ${SEV[inc.c.sev].label}`;
 
-function openDecision(inc) {
+async function openDecision(inc) {
   if (inc.c.mg && inc.mgMod == null) return runMinigame(inc.c.mg, score => {
     inc.mgMod = Math.round((score - 0.5) * 40); inc.mgScore = score; openDecision(inc);
   });
   const a = agentById(inc.agent), d = inc.c.decision, base = clamp(chance(a, inc.c.needs) + (inc.mgMod || 0), 5, 95);
-  const secs = S.level === 'deneyimli' ? +(P.get('timer') || 60) : 0;
+  // v2: model zorlanma riskini yüksek bulursa destek modu (tutor açık gelir, süre baskısı kalkar)
+  const p = await uyumTahmin(uyumGirdi()).catch(() => null), destek = p != null && p >= UYUM_ESIK;
+  const secs = S.level === 'deneyimli' && !destek ? +(P.get('timer') || 60) : 0;
+  const rozet = `<p class="uyum ${destek ? 'destek' : ''}" data-cy="uyum" data-mod="${p == null ? 'yok' : destek ? 'destek' : 'akis'}">🧭 ${p == null ? 'Uyum modeli yok · v1 kuralları' : `${destek ? 'Destek modu: tutor açık, süre baskısı yok' : 'Akış modu'} · risk <span data-cy="p">${p.toFixed(4)}</span>`}</p>`;
+  inc.t0 = Date.now();
   const opts = visibleOptions(d, a);
   const shown = TEST ? opts : shuffle(opts);
   const mg = inc.mgMod == null ? '' : `<p class="mg-result" data-cy="mg-result">Mini görev: ${inc.c.mg.kind === 'cables' ? `${Math.round(inc.mgScore * 4)}/4 kablo doğru` : inc.mgScore === 1 ? 'komut doğru çalıştı' : 'komut hatalı'} · ihtimal ${inc.mgMod >= 0 ? '+' : ''}${inc.mgMod}</p>`;
   openModal(`<span class="tag orange">${decTitle(inc)}</span><h2>${inc.c.title}</h2><p>${d.text}</p>${mg}
-    <p class="muted"><span class="inline-ic">${a.icon}</span> ${a.name} sahada</p>
+    <p class="muted"><span class="inline-ic">${a.icon}</span> ${a.name} sahada</p>${rozet}
     ${secs ? `<div class="timer" data-cy="timer"><i></i><span>${secs}</span> sn</div>` : ''}
     ${S.level === 'yeni' ? `<p class="hint" data-cy="hint">💡 ${inc.c.hints[0]}</p>` : ''}
     ${optButtons(shown, a)}
@@ -383,6 +396,8 @@ function openDecision(inc) {
   el => {
     el.querySelectorAll('.opt').forEach(b => b.onclick = () => resolveMain(inc, a, base, d.options.find(o => o.id === b.dataset.o)));
     mountTutor(el, { c: inc.c, agent: a, level: S.level, role: S.role, history: [] });
+    const tut = el.querySelector('[data-cy=tutor]');
+    if (destek && tut) { tut.open = true; el.querySelector('[data-cy=tutor-send]').onclick(true); }
     if (secs) startTimer(el, secs, () => resolveMain(inc, a, base, TIMEOUT_OPT));
   });
 }
@@ -401,6 +416,7 @@ function resolveMain(inc, a, base, o) {
   closeModal();
   const main = inc.kind === 'main', ch = clamp(base + o.mod, 5, 95), ok = roll(ch), delta = ok ? (main ? -12 : -10) : (main ? 20 : 15);
   if (o.kvkk) S.kvkk = true;
+  S.kararSn.push((Date.now() - inc.t0) / 1000); if (o.id === 'B' || o === TIMEOUT_OPT) S.kotu++;
   sfx(ok ? 'success' : 'fail');
   addHeat(delta);
   const what = ok ? o.ok : o.fail;
