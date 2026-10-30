@@ -1,0 +1,99 @@
+{
+  "name": "overload-uyum",
+  "version": "2.0.0",
+  "task": "Karar penceresi açılırken oyuncunun cazip ama kötü seçeneği seçme olasılığı",
+  "target": "kotu_secim",
+  "class_labels": {
+    "0": "iyi seçim (A/C/D)",
+    "1": "kötü seçim (B ya da süre doldu)"
+  },
+  "classes": [
+    "0",
+    "1"
+  ],
+  "features": [
+    {
+      "name": "seviye",
+      "index": 0,
+      "dtype": "float32",
+      "example": 2.0
+    },
+    {
+      "name": "karar_no",
+      "index": 1,
+      "dtype": "float32",
+      "example": 2.0
+    },
+    {
+      "name": "ort_karar_sn",
+      "index": 2,
+      "dtype": "float32",
+      "example": 22.7
+    },
+    {
+      "name": "onceki_kotu",
+      "index": 3,
+      "dtype": "float32",
+      "example": 0.0
+    },
+    {
+      "name": "uyumsuz_ajan",
+      "index": 4,
+      "dtype": "float32",
+      "example": 1.0
+    },
+    {
+      "name": "overload",
+      "index": 5,
+      "dtype": "float32",
+      "example": 1.0
+    },
+    {
+      "name": "tutor_soru",
+      "index": 6,
+      "dtype": "float32",
+      "example": 0.0
+    }
+  ],
+  "onnx": {
+    "input": "input",
+    "input_shape": [
+      null,
+      7
+    ],
+    "output": "probabilities",
+    "positive_class_index": 1,
+    "opset": 17
+  },
+  "decision_threshold": 0.5,
+  "acceptance": {
+    "auc": 0.75,
+    "accuracy": 0.7
+  },
+  "metrics": {
+    "auc": 0.8918,
+    "accuracy": 0.8315,
+    "onnx_max_diff": 1.19e-07
+  },
+  "coefficients": {
+    "seviye": -0.2893,
+    "karar_no": -0.4336,
+    "ort_karar_sn": 0.572,
+    "onceki_kotu": 0.8282,
+    "uyumsuz_ajan": 0.8908,
+    "overload": 0.4578,
+    "tutor_soru": -0.2431
+  },
+  "data": {
+    "rows": 2183,
+    "sessions": 400,
+    "sources": {
+      "sentetik": 2183
+    },
+    "positive_rate": 0.3312,
+    "split": "test %25, tabakalı"
+  },
+  "seed": 13,
+  "sklearn_version": "1.9.1",
+  "python_version": "3.12"
+}
