@@ -5,7 +5,7 @@
 const UYUM_OZELLIK = ['seviye', 'karar_no', 'ort_karar_sn', 'onceki_kotu', 'uyumsuz_ajan', 'overload', 'tutor_soru'];
 const UYUM_ESIK = 0.5; // config.json → decision_threshold
 // Önce Hugging Face'teki commit'e sabit sürüm, ulaşılamazsa repodaki kopya
-const UYUM_URL = ['model/model.onnx'];
+const UYUM_URL = ['https://huggingface.co/huseyinbaran/overload-uyum/resolve/fb68aba957fc4c62f6b3b0f0f3e68c0d966ba984/model.onnx', 'model/model.onnx'];
 
 const uyumHazir = (async () => {
   if (typeof ort === 'undefined') return null; // CDN yüklenmediyse oyun v1 kurallarıyla devam eder

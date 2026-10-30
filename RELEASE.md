@@ -3,10 +3,10 @@
 ## v2.0.0 · uyum modeli
 
 **Model reposu:** https://huggingface.co/huseyinbaran/overload-uyum
-**Sabitlenen commit:** `HF_COMMIT`
+**Sabitlenen commit:** `fb68aba957fc4c62f6b3b0f0f3e68c0d966ba984`
 **Oyunun indirdiği adres** (`js/uyum.js` → `UYUM_URL`, `main` değil):
 ```
-https://huggingface.co/huseyinbaran/overload-uyum/resolve/HF_COMMIT/model.onnx
+https://huggingface.co/huseyinbaran/overload-uyum/resolve/fb68aba957fc4c62f6b3b0f0f3e68c0d966ba984/model.onnx
 ```
 
 ### Ne değişti?
