@@ -11,3 +11,6 @@ cypress/screenshots/
 # gizli anahtarlar asla repoya girmesin
 .env
 .env.*
+.venv/
+_out/
+__pycache__/

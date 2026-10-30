@@ -286,3 +286,73 @@ stateDiagram-v2
 | Eval neden oyunla aynı kodu kullanıyor? | Talimat ve prompt tek kaynaktan (`js/tutor.js`) gelir; eval başka bir şeyi değil oyundaki tutor'u ölçer. |
 | Neden ES module yok? | Oyun `index.html`'e çift tıklayınca da açılsın; modüller `file://` adresinde çalışmaz. |
 | Dil | Oyun ve belgeler Türkçe; README İngilizce ve Türkçe. |
+
+---
+
+## 12. v2 · Uyum modeli (The Primer v2)
+
+> Bu bölüm **eğitimden önce** yazıldı ve ayrı bir commit'le kaydedildi; eşik sonradan değiştirilmez.
+
+### 12.1 Problem
+
+v1'de uyum sabit kurallara dayanıyordu: "yeni başladım" diyen herkes ipucu görür, "deneyimliyim" diyen herkes süre baskısı altında karar verir. Ama aynı seviyeyi seçen iki oyuncu çok farklı oynar: biri hızlı ve isabetli karar verir, öteki tereddüt eder, uyumsuz ajan gönderir, cazip ama kötü seçeneğe kayar. v2'de uyum, oyuncunun **o ana kadarki davranışından** öğrenen küçük bir modele bağlanır.
+
+### 12.2 Modelin görevi
+
+Bir karar penceresi açıldığı anda: **"Bu oyuncu bu kararda cazip ama kötü seçeneği seçecek mi (ya da süreyi dolduracak mı)?"**
+
+- **Hedef (`kotu_secim`):** 1 = oyuncu B seçeneğini (cazip ama kötü) seçti ya da süre doldu; 0 = A, C ya da D'yi seçti.
+- **Girdiler** (hepsi pencere açılırken bilinir; ayrıntılar ve birimler `data/SOZLUK.md`):
+
+| Özellik | Anlamı |
+|---|---|
+| `seviye` | 0 yeni başladı · 1 biraz biliyor · 2 deneyimli |
+| `karar_no` | Bu vardiyadaki kaçıncı karar (1'den başlar) |
+| `ort_karar_sn` | Önceki kararlarda pencerenin açık kaldığı ortalama süre (tereddüt); ilk kararda 0 |
+| `onceki_kotu` | Önceki kararlarda kaç kez kötü seçenek seçildi ya da süre doldu |
+| `uyumsuz_ajan` | Bu vardiyada kaç kez işe uygun olmayan (başarı ihtimali < %75) ajan gönderildi |
+| `overload` | Pencere açıldığında Overload yüzdesi (0–100) |
+| `tutor_soru` | Bu vardiyada tutor'a kaç soru soruldu |
+
+- **Model:** `StandardScaler → LogisticRegression` (sklearn), `random_state=13`, ONNX'e aktarılır, tarayıcıda `onnxruntime-web` ile çalışır.
+- **Oyuna etkisi** (eşik `p ≥ 0,5`, `config.json` → `decision_threshold`):
+  - **Destek modu (p ≥ 0,5):** tutor kutusu açık gelir ve ilk Sokratik soruyu kendiliğinden sorar; deneyimli moddaki süre sayacı kalkar.
+  - **Akış modu (p < 0,5):** tutor kapalı gelir; süre sayacı seviyeye göre kalır.
+  - Pencerede küçük bir rozet modelin kararını ve olasılığı gösterir (`data-cy="p"`).
+  - Model yüklenemezse oyun v1 kurallarıyla devam eder (rozet "model yok" der).
+
+### 12.3 Eval metriği ve kabul eşiği (altın standart)
+
+| Metrik | Ölçüm | Eşik |
+|---|---|---|
+| **ROC-AUC** (birincil) | %25 ayrılmış test kümesi, tabakalı, `random_state=13` | **≥ 0,75** |
+| Doğruluk | aynı test kümesi, eşik 0,5 | ≥ 0,70 |
+| ONNX ↔ sklearn | test kümesinde en büyük olasılık farkı | ≤ 1e-4 |
+| Uygulama ↔ Python (parite) | 5 referans girdi (`tests/parite.json`) | < 1e-4 |
+
+`train.py` eşiklerden biri tutmazsa **hata koduyla durur** ve `model/` klasörüne hiçbir şey yazmaz; eşiği geçmeyen model yayınlanmaz.
+
+Neden ROC-AUC? Pozitif sınıf (kötü seçim) azınlıkta; doğruluk "hep 0 de" diyen bir modeli de iyi gösterir. AUC, modelin zorlanan oyuncuyu zorlanmayandan **sıralayabildiğini** ölçer; oyundaki eşik (0,5) ayrıca ayarlanabilir.
+
+### 12.4 Kabul örnekleri (v2)
+
+**AE-9 · Zorlanan oyuncuya destek**
+- *Diyelim ki* oyuncu ilk çağrıda iki kez cazip ama kötü seçeneği seçmiş ve uyumsuz ajan göndermiştir,
+- *Ne zaman ki* aynı çağrının karar penceresi üçüncü kez açılır ve model `p ≥ 0,5` verir,
+- *O zaman* rozet "destek" der, tutor kutusu açık gelir ve ilk Sokratik soru görünür; süre sayacı yoktur.
+
+**AE-10 · Akıcı oyuncuya baskı**
+- *Diyelim ki* deneyimli bir oyuncu vardiyaya yeni başlamıştır (önceki kötü seçim yok, uyumsuz ajan yok),
+- *Ne zaman ki* ilk karar penceresi açılır ve model `p < 0,5` verir,
+- *O zaman* rozet "akış" der, tutor kutusu kapalıdır ve süre sayacı görünür.
+
+**AE-11 · İki ortam aynı sonucu verir (diferansiyel test)**
+- *Diyelim ki* `tests/parite.json`'da 5 referans girdi ve Python'un (`onnxruntime`) verdiği olasılıklar vardır,
+- *Ne zaman ki* aynı girdiler tarayıcıda (`onnxruntime-web`) aynı `model.onnx` ile çalıştırılır,
+- *O zaman* her girdide fark `1e-4`'ten küçüktür.
+
+### 12.5 Veri
+
+- `data/oturumlar.csv`: her karar bir satır; `kaynak` sütunu `gercek` | `sentetik`.
+- Kişisel veri yok: ad, e-posta, cihaz kimliği, konum toplanmaz; `oturum_id` rastgele üretilir.
+- Bu sürümde veri **sentetiktir**; üretici kuralı ve tohumu `data/SOZLUK.md` ve `README.md`'de yazılıdır.
