@@ -80,6 +80,7 @@ Girdiler oyuncunun o vardiyadaki davranışı: tereddüt (ortalama karar süresi
 
 | | |
 |---|---|
+| 🌐 Canlı (v2) | [huseyinbaranisik.github.io/OverLoad](https://huseyinbaranisik.github.io/OverLoad/): model Hugging Face'teki commit'e sabit URL'den iner, tarayıcıda çalışır |
 | 📄 Spec | [`spec.md` §12](spec.md): görev, eşik (AUC ≥ 0,75), AE-9/10/11. Eğitimden **önce** commit'lendi (`fb07e3c`). |
 | 🗃️ Veri | [`data/oturumlar.csv`](data/oturumlar.csv): 400 oturum, 2183 karar · [`data/SOZLUK.md`](data/SOZLUK.md) · 📋 gerçek veri toplama: [oyunu `?veri` ile aç](https://huseyinbaranisik.github.io/OverLoad/?veri), vardiya sonunda CSV iner |
 | 🏋️ Eğitim | [`train.py`](train.py): tek komut, tohum 13, eşik altında hata verip durur |
