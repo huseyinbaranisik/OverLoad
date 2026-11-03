@@ -8,7 +8,7 @@
 
 Overload is a mobile decision game for a software engineering course (YZM301 · SE Primer). A hospital's IT is falling apart and you are the command layer: you send AI agents into the field, pick what they do, and see the consequence right away. In v2 a small model trained on gameplay behaviour runs in the browser and changes how the game treats you.
 
-**Play:** [huseyinbaranisik.github.io/OverLoad](https://huseyinbaranisik.github.io/OverLoad/) · **Model:** [huggingface.co/huseyinbaran/overload-uyum](https://huggingface.co/huseyinbaran/overload-uyum) · **Server:** [overload-uyum.onrender.com/health](https://overload-uyum.onrender.com/health) · **v1 demo video:** [YouTube](https://youtu.be/fxyTmpdYf20)
+**Play:** [huseyinbaranisik.github.io/OverLoad](https://huseyinbaranisik.github.io/OverLoad/) · **Model:** [huggingface.co/huseyinbaran/overload-uyum](https://huggingface.co/huseyinbaran/overload-uyum) · **Server:** [overload-uyum.onrender.com/health](https://overload-uyum.onrender.com/health) · **v2 demo video:** [YouTube](https://youtube.com/shorts/FQMjM3CmmGs) · **v1 demo video:** [YouTube](https://youtu.be/fxyTmpdYf20)
 
 ## Demo
 
@@ -141,7 +141,7 @@ The game: serve `index.html` locally (for example `python -m http.server`). On m
 | v1 | App | [AI Studio](https://ai.studio/apps/5bc7e967-3e3e-4ac6-8201-5ffd4aa2acdb) (v1, no model) · source [`aistudio/`](aistudio/) |
 | v1 | Tutor eval | [`eval/`](eval/): 20 cases, raw answers, labels, report |
 | v1 | Cypress + demo | [`cypress/`](cypress/) · [video](https://youtu.be/fxyTmpdYf20) |
-| v2 | Model, release, tests | [The adaptation model](#the-adaptation-model-v2) above · live v2 game on [GitHub Pages](https://huseyinbaranisik.github.io/OverLoad/) |
+| v2 | Model, release, tests | [The adaptation model](#the-adaptation-model-v2) above · live v2 game on [GitHub Pages](https://huseyinbaranisik.github.io/OverLoad/) · [demo video](https://youtube.com/shorts/FQMjM3CmmGs) |
 
 ## AI tools
 
@@ -160,7 +160,7 @@ The declaration is kept in the student's own words in the Turkish section below 
 
 Overload, bir yazılım mühendisliği dersi (YZM301 · SE Primer) için yapılmış mobil bir karar oyunu. Hastanenin bilişim sistemleri çöküyor ve sen Komuta Katmanı'sın: sahaya yapay zekâ ajanları gönderiyor, ne yapacaklarını seçiyor ve sonucunu hemen görüyorsun. v2'de oyuncu davranışıyla eğitilmiş küçük bir model tarayıcıda çalışıyor ve oyunun sana nasıl davrandığını değiştiriyor.
 
-**Oyna:** [huseyinbaranisik.github.io/OverLoad](https://huseyinbaranisik.github.io/OverLoad/) · **Model:** [huggingface.co/huseyinbaran/overload-uyum](https://huggingface.co/huseyinbaran/overload-uyum) · **Sunucu:** [overload-uyum.onrender.com/health](https://overload-uyum.onrender.com/health) · **v1 demo videosu:** [YouTube](https://youtu.be/fxyTmpdYf20)
+**Oyna:** [huseyinbaranisik.github.io/OverLoad](https://huseyinbaranisik.github.io/OverLoad/) · **Model:** [huggingface.co/huseyinbaran/overload-uyum](https://huggingface.co/huseyinbaran/overload-uyum) · **Sunucu:** [overload-uyum.onrender.com/health](https://overload-uyum.onrender.com/health) · **v2 demo videosu:** [YouTube](https://youtube.com/shorts/FQMjM3CmmGs) · **v1 demo videosu:** [YouTube](https://youtu.be/fxyTmpdYf20)
 
 ### Demo
 
