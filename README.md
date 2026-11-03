@@ -227,7 +227,7 @@ Oyun: `index.html`'i bir yerel sunucuyla aç (ör. `python -m http.server`). mac
 - **Claude Code (Opus):** spec §12 taslağı, sentetik veri üreteci, `train.py`, ONNX aktarımı, `js/uyum.js`, parite ve Cypress testleri, `RELEASE.md` ve `SINAV_TASARIMI.md` taslakları.
 - **Benim kararlarım:** hedef (kötü seçime kayma riski) ve oyuna etkisi (destek/akış), kabul eşiği, gerçek oyuncu yerine sentetik veriyle ilerleme (veri puanının yarısını bilerek bıraktım), sunucu yerine tarayıcıda çıkarım.
 - **Gemini (AI Studio):** oyunun AI Studio sürümü ve sunucu taraflı tutor köprüsü; Sokratik tutor'un kendisi.
-- **Elle düzelttiklerim:** _…(teslimden önce doldurulacak)_
+- **Elle düzelttiklerim:** oyundaki bazı seçimler (karar seçenekleri), ajanların bekleme (soğuma) süreleri ve oyunun akış süresi.
 
 ### Emeği geçenler
 
