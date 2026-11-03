@@ -51,6 +51,8 @@ Bu sürümde veri sentetik olduğu için gölge aşaması **gerçek oyuncu veris
 | **3. Model gizli kalır mı?** | Hayır: `model.onnx` herkese açık indirilir, katsayılar okunabilir. Bizde sorun değil: model zaten public repoda ve katsayılar model kartında. | Hayır: uygulama paketinden çıkarılabilir. | Evet, dosya gizli kalır; ama istek-yanıtla sorgulanarak davranışı tersine mühendislikle taklit edilebilir. |
 | **Maliyet / bakım** | Sıfır; GitHub Pages ya da AI Studio yeter. | Expo derlemesi ve cihaz testi. | Ücretsiz katman sınırları, sunucu bakımı. |
 
+**Üçüncü tüketici (sunucu sütunu, ölçüldü):** [`server/app.py`](server/app.py) aynı commit'e sabit `model.onnx`'i FastAPI + `onnxruntime` ile sunar (`render.yaml`, Render ücretsiz katman). `tests/parite.py --sunucu <url>` 5 referans girdide Python kahiniyle farkı ölçer: yerelde en büyük fark **6,2e-8** (< 1e-4). Oyun sunucuyu kullanmaz; bu sütundaki gecikme ve gizlilik değerlendirmesini somut olarak denemek için var.
+
 **Karar:** tarayıcı. Oyun zaten tarayıcıda çalışıyor, model küçük ve gizli olması gereken bir şey içermiyor, en önemlisi oyuncunun davranış verisi cihazdan çıkmıyor. Sunucu seçeneği yalnızca modeli gizlemek gerekseydi ya da model büyük olsaydı anlamlı olurdu.
 
 ### Kaynaklar

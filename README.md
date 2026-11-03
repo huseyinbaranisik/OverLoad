@@ -87,6 +87,7 @@ Girdiler oyuncunun o vardiyadaki davranışı: tereddüt (ortalama karar süresi
 | 📦 Artefakt | [`model/`](model/): `model.onnx` (573 bayt) · `config.json` (sözleşme) · [model kartı](model/README.md) |
 | 🚀 Yayın | [Hugging Face](https://huggingface.co/huseyinbaran/overload-uyum) · [`RELEASE.md`](RELEASE.md): commit'e sabit URL, rollback, gölge/kanarya, ödünleşim matrisi |
 | 🧪 Test | [`tests/parite.py`](tests/parite.py) (Python kahini) · [`cypress/e2e/model.cy.js`](cypress/e2e/model.cy.js): tarayıcı ↔ Python fark < 1e-4, AE-9/10 · eski 14 test ✅ |
+| 🖥️ Sunucu (bonus) | [`server/app.py`](server/app.py): FastAPI + `onnxruntime`, aynı commit'e sabit model · `POST /predict` · Render: [`render.yaml`](render.yaml) · parite: `tests/parite.py --sunucu <url>` |
 | 📝 Sınav | [`SINAV_TASARIMI.md`](SINAV_TASARIMI.md) |
 
 **Sonuç:** test AUC **0,892**, doğruluk 0,832, ONNX ↔ sklearn farkı 1,2e-7, tarayıcı ↔ Python farkı 4e-9.

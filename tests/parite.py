@@ -2,6 +2,7 @@
 
     .venv/Scripts/python tests/parite.py           → tests/parite.json'u (5 referans girdi + olasılık) yazar
     .venv/Scripts/python tests/parite.py --kontrol → kayıtlı değerlerle karşılaştırır, fark ≥ 1e-4 ise hata verir
+    .venv/Scripts/python tests/parite.py --sunucu https://…onrender.com → sunucunun /predict cevabını karşılaştırır
 
 Tarayıcı tarafı: cypress/e2e/model.cy.js aynı girdileri onnxruntime-web'e verir ve farkın < 1e-4 olduğunu doğrular.
 """
@@ -32,8 +33,26 @@ def hesapla():
     return oturum.run(["probabilities"], {"input": X})[0][:, CONFIG["onnx"]["positive_class_index"]]
 
 
+def sunucu_kontrol(url):
+    """Üçüncü tüketici (server/app.py): aynı 5 girdiyi HTTP ile sorar."""
+    import urllib.request
+    kayit = json.loads((KOK / "tests" / "parite.json").read_text(encoding="utf-8"))["cases"]
+    fark = 0.0
+    for k in kayit:
+        istek = urllib.request.Request(url.rstrip("/") + "/predict", json.dumps({"features": k["features"]}).encode(),
+                                       {"Content-Type": "application/json"})
+        p = json.loads(urllib.request.urlopen(istek, timeout=90).read())["p"]  # ücretsiz katman uyanırken yavaş
+        print(f"  sunucu {p:.8f} · Python {k['p']:.8f}  {k['name']}")
+        fark = max(fark, abs(p - k["p"]))
+    if fark >= TOLERANS:
+        sys.exit(f"✗ sunucu paritesi bozuk: en büyük fark {fark:.2e} ≥ {TOLERANS}")
+    print(f"✓ sunucu paritesi: 5 girdi, en büyük fark {fark:.1e} < {TOLERANS}")
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
+    if "--sunucu" in sys.argv:
+        return sunucu_kontrol(sys.argv[sys.argv.index("--sunucu") + 1])
     p = hesapla()
     yol = KOK / "tests" / "parite.json"
     if "--kontrol" in sys.argv:

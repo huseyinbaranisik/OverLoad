@@ -23,6 +23,7 @@ from sklearn.preprocessing import StandardScaler
 
 KOK = Path(__file__).resolve().parent
 VERI = KOK / "data" / "oturumlar.csv"
+GERCEK = KOK / "data" / "gercek"  # oyunun ?veri modunda indirilen oturum-*.csv dosyaları (data/SOZLUK.md)
 MODEL_DIR = KOK / "model"
 SEED = 13
 HEDEF = "kotu_secim"
@@ -33,7 +34,7 @@ KARAR_ESIGI = 0.5  # oyunda destek modunun açıldığı olasılık
 
 
 def egit():
-    veri = pd.read_csv(VERI)
+    veri = pd.concat([pd.read_csv(VERI), *map(pd.read_csv, sorted(GERCEK.glob("*.csv")))], ignore_index=True)
     X, y = veri[OZELLIKLER].astype("float32"), veri[HEDEF]
     X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.25, stratify=y, random_state=SEED)
     model = Pipeline([("scaler", StandardScaler()), ("lr", LogisticRegression(random_state=SEED))])
