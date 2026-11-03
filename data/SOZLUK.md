@@ -16,6 +16,10 @@ Her satır **bir karar**dır: oyuncunun bir karar penceresini açtığı an ve o
 | `karar_sn` | ondalık | saniye | Bu kararın pencerede geçen süresi | ✘ (karar anında bilinmez; sonraki satırın `ort_karar_sn`'sine girer) |
 | `kotu_secim` | tamsayı | 0 · 1 | **Hedef.** 1 = B seçildi ya da süre doldu; 0 = A, C ya da D seçildi | hedef |
 
+## Gerçek veri toplama (`?veri`)
+
+Oyun `index.html?veri` ile açılınca **veri toplama modu**nda çalışır. Bu mod gölge dağıtımdır (`RELEASE.md`): model her pencerede çalışır ama oyunu değiştirmez (tutor kendiliğinden açılmaz, sayaç kalkmaz), böylece toplanan veri modelin kendi kararından etkilenmez. Her karar bu tablodaki sütunlarla, `kaynak = gercek` olarak kaydedilir. Vardiya bitince "📥 Oturum verisini indir" düğmesi `oturum-<oturum_id>.csv` dosyasını indirir; dosyalar `data/gercek/` klasörüne konur. Test: `cypress/e2e/model.cy.js` → "Veri toplama modu".
+
 ## Gizlilik (KVKK)
 
 Ad, e-posta, cihaz kimliği, IP, konum ve saat toplanmaz. `oturum_id` rastgeledir; bir satırdan kişiye ulaşılamaz. Oyunun kendisi de bu sütunlar dışında bir şey kaydetmez.

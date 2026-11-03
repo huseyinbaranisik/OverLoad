@@ -14,3 +14,4 @@ cypress/screenshots/
 .venv/
 _out/
 __pycache__/
+cypress/downloads/

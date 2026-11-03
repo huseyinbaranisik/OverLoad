@@ -40,4 +40,32 @@ describe("Uyum modeli", () => {
     cy.get("[data-cy=tutor-reply]").should("have.length", 1);
     cy.get("[data-cy=timer]").should("not.exist");
   });
+
+  it("Veri toplama modu (?veri): gölgede model oyunu değiştirmez, her karar data/oturumlar.csv biçiminde iner", () => {
+    cy.startGame({ level: "yeni", extra: "&veri" });
+    cy.acceptCall();
+    ["llama", "mistral"].forEach((agent) => { // AE-9'daki gibi: normalde destek moduna geçirirdi
+      cy.dispatchTo(agent, "randevu");
+      cy.decide("B");
+      cy.continue();
+    });
+    cy.dispatchTo("claude", "randevu");
+    cy.get("[data-cy=uyum]").should("have.attr", "data-mod", "golge");
+    cy.get("[data-cy=tutor]").should("not.have.attr", "open");
+    cy.decide("A");
+    cy.continue();
+    cy.playCall("claude", "bildirim", "A");
+    cy.playCall("llama", "kayit", "A");
+    cy.get("[data-cy=veri-indir]").should("contain", "5 karar").click();
+    cy.window().then((w) => {
+      cy.readFile(`cypress/downloads/oturum-${w.eval("OTURUM_ID")}.csv`).then((csv) => {
+        const [baslik, ...satir] = csv.trim().split("\n").map((s) => s.split(","));
+        cy.readFile("data/oturumlar.csv").then((ref) => expect(baslik).to.deep.equal(ref.split("\n")[0].trim().split(",")));
+        expect(satir).to.have.length(5);
+        expect(satir.map((r) => r[1])).to.deep.equal(Array(5).fill("gercek"));
+        expect(satir.map((r) => r.at(-1))).to.deep.equal(["1", "1", "0", "0", "0"]); // kotu_secim
+        expect(satir.map((r) => r[5])).to.deep.equal(["0", "1", "2", "2", "2"]); // onceki_kotu
+      });
+    });
+  });
 });

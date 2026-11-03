@@ -69,7 +69,12 @@ const S = {
   callIdx: 0, cleared: 0, boomed: 0, spawnIn: 8, bag: [], incidents: [], sel: null, agent: Object.fromEntries(AGENTS.map(a => [a.id, 'hazir'])),
   energy: Object.fromEntries(AGENTS.map(a => [a.id, 100])), cool: Object.fromEntries(AGENTS.map(a => [a.id, 0])), log: [], over: false, nid: 0,
   kararSn: [], kotu: 0, uyumsuz: 0, // uyum modelinin girdileri (data/SOZLUK.md)
+  veri: [], // ?veri modunda her karar bir satır (data/oturumlar.csv biçiminde)
 };
+// Veri toplama modu = gölge: model çalışır ama oyunu değiştirmez, böylece toplanan veri modelden etkilenmez (RELEASE.md)
+const VERI = P.has('veri');
+const OTURUM_ID = [...crypto.getRandomValues(new Uint8Array(4))].map(b => b.toString(16).padStart(2, '0')).join(''); // kişiye bağlı değil (KVKK)
+const VERI_SUTUN = ['oturum_id', 'kaynak', ...UYUM_OZELLIK, 'karar_sn', 'kotu_secim'];
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 const roll = ch => TEST ? ch >= 50 : Math.random() * 100 < ch;
 function chance(a, needs) {
@@ -380,9 +385,11 @@ async function openDecision(inc) {
   });
   const a = agentById(inc.agent), d = inc.c.decision, base = clamp(chance(a, inc.c.needs) + (inc.mgMod || 0), 5, 95);
   // v2: model zorlanma riskini yüksek bulursa destek modu (tutor açık gelir, süre baskısı kalkar)
-  const p = await uyumTahmin(uyumGirdi()).catch(() => null), destek = p != null && p >= UYUM_ESIK;
+  inc.x = uyumGirdi();
+  const p = await uyumTahmin(inc.x).catch(() => null), destek = !VERI && p != null && p >= UYUM_ESIK;
   const secs = S.level === 'deneyimli' && !destek ? +(P.get('timer') || 60) : 0;
-  const rozet = `<p class="uyum ${destek ? 'destek' : ''}" data-cy="uyum" data-mod="${p == null ? 'yok' : destek ? 'destek' : 'akis'}">🧭 ${p == null ? 'Uyum modeli yok · v1 kuralları' : `${destek ? 'Destek modu: tutor açık, süre baskısı yok' : 'Akış modu'} · risk <span data-cy="p">${p.toFixed(4)}</span>`}</p>`;
+  const rozet = VERI ? `<p class="uyum" data-cy="uyum" data-mod="golge">📋 Veri toplama modu · karar ${inc.x.karar_no}</p>`
+    : `<p class="uyum ${destek ? 'destek' : ''}" data-cy="uyum" data-mod="${p == null ? 'yok' : destek ? 'destek' : 'akis'}">🧭 ${p == null ? 'Uyum modeli yok · v1 kuralları' : `${destek ? 'Destek modu: tutor açık, süre baskısı yok' : 'Akış modu'} · risk <span data-cy="p">${p.toFixed(4)}</span>`}</p>`;
   inc.t0 = Date.now();
   const opts = visibleOptions(d, a);
   const shown = TEST ? opts : shuffle(opts);
@@ -416,7 +423,9 @@ function resolveMain(inc, a, base, o) {
   closeModal();
   const main = inc.kind === 'main', ch = clamp(base + o.mod, 5, 95), ok = roll(ch), delta = ok ? (main ? -12 : -10) : (main ? 20 : 15);
   if (o.kvkk) S.kvkk = true;
-  S.kararSn.push((Date.now() - inc.t0) / 1000); if (o.id === 'B' || o === TIMEOUT_OPT) S.kotu++;
+  const sn = (Date.now() - inc.t0) / 1000, kotu = o.id === 'B' || o === TIMEOUT_OPT;
+  if (VERI) S.veri.push({ oturum_id: OTURUM_ID, kaynak: 'gercek', ...inc.x, ort_karar_sn: +inc.x.ort_karar_sn.toFixed(1), karar_sn: +sn.toFixed(1), kotu_secim: +kotu });
+  S.kararSn.push(sn); if (kotu) S.kotu++;
   sfx(ok ? 'success' : 'fail');
   addHeat(delta);
   const what = ok ? o.ok : o.fail;
@@ -483,7 +492,13 @@ function endGame(type) {
     <p class="goal-line">Hedefin: <b>${goal}</b> <span class="${met() ? 'ok' : 'no'}">${met() ? '✔' : '✘'}</span></p>
     <h3>Kararların</h3>
     <ul class="log">${S.log.map(l => `<li class="${l.ok ? '' : 'fail'}"><b>${l.title}</b> · ${l.choice}<small>${l.what}</small><small>Neden: ${l.why}</small></li>`).join('') || '<li>Hiç karar verilmedi.</li>'}</ul>
+    ${VERI ? `<button class="btn-play small" data-cy="veri-indir">📥 Oturum verisini indir (${S.veri.length} karar)</button>` : ''}
     <button class="btn-play" data-cy="restart" onclick="location.reload()">ANA MENÜ</button>`;
+  if (VERI) $('[data-cy=veri-indir]').onclick = () => {
+    const csv = [VERI_SUTUN, ...S.veri.map(r => VERI_SUTUN.map(k => r[k]))].map(r => r.join(',')).join('\n') + '\n';
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = `oturum-${OTURUM_ID}.csv`; a.click();
+  };
   sfx(e.good ? 'win' : 'lose');
   crtSwap('end');
 }
