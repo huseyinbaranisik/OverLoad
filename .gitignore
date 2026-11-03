@@ -15,3 +15,4 @@ cypress/screenshots/
 _out/
 __pycache__/
 cypress/downloads/
+tools/_frames/

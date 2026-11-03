@@ -1,0 +1,12 @@
+$ python train.py
+test metrikleri: {'auc': 0.8918, 'accuracy': 0.8315, 'onnx_max_diff': 1.19e-07}  (eşik: {'auc': 0.75, 'accuracy': 0.7}, onnx ≤ 1e-4)
+✓ model/ yazıldı: model.onnx (573 bayt), config.json · onnx farkı 1.2e-07
+$ python tests/parite.py --kontrol
+✓ parite: 5 girdi, en büyük fark 4.1e-09 < 0.0001
+$ python tests/parite.py --sunucu https://overload-uyum.onrender.com
+  sunucu 0.04782322 · Python 0.04782322  deneyimli, vardiya başı
+  sunucu 0.67797357 · Python 0.67797363  yeni, iki kötü seçim ve iki uyumsuz ajan
+  sunucu 0.28292695 · Python 0.28292695  orta, tereddütlü ama isabetli
+  sunucu 0.71509194 · Python 0.71509194  orta, bir kötü seçim ve iki uyumsuz ajan
+  sunucu 0.99776030 · Python 0.99776030  yeni, Overload tavanda
+✓ sunucu paritesi: 5 girdi, en büyük fark 6.2e-08 < 0.0001
